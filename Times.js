@@ -18,21 +18,10 @@ async function getSunriseSunsetTime(latitude, longitude) {
 }
 // Function to display the sunrise and sunset times on the HTML page
 function displaySunriseSunsetTimes(sunriseTime, sunsetTime) {
-    const table = document.querySelector('#sunrise-sunset-table');
-    const headerRow = table.querySelector('thead tr');
-    const dataRows = table.querySelectorAll('tbody tr');
-
-    const newHeaderCell = document.createElement('th');
-    newHeaderCell.textContent = 'Sunrise';
-    headerRow.insertBefore(newHeaderCell, headerRow.children[0]);
-
-    const newDataCell = document.createElement('td');
-    newDataCell.textContent = '${sunriseTime}'
-    dataRows.insertBefore(newDataCell, dataRows.children[10]);
-    //sunriseSunsetInfoDiv.innerHTML = '${sunriseTime}'
-    //<h1>Sunrise and Sunset Times</h1>
-    //<p>Sunrise:}</p>
-    //<p>Sunset: ${sunsetTime}</p>
+    const sunsetTimeCell = document.getElementById('sunsetTime');
+    const sunriseTimeCell = document.getElementById('sunriseTime');
+    sunriseTimeCell.textContent = sunriseTime;
+    sunsetTimeCell.textContent = sunsetTime;
     
 }
 // Function to display the sunrise and sunset times
@@ -40,6 +29,7 @@ function displaySunriseSunsetTime(data) {
     if (data) {
         const sunriseTime = new Date(data.sunrise).toLocaleTimeString();
         const sunsetTime = new Date(data.sunset).toLocaleTimeString();
+        displaySunriseSunsetTime(sunriseTime,sunsetTime);
         console.log('Sunrise Time:', sunriseTime);
         console.log('Sunset Time:', sunsetTime);
         displaySunriseSunsetTimes(sunrise, sunset);
@@ -47,6 +37,8 @@ function displaySunriseSunsetTime(data) {
         console.log('Unable to fetch sunrise-sunset data.');
     }
 }
+// Call the main function when the page finishes loading
+window.addEventListener('load', loadSunriseSunsetData);
 
 // Call the functions
 getSunriseSunsetTime(latitude, longitude)
