@@ -25,7 +25,6 @@ function displaySunriseSunsetTimes(sunriseTime, sunsetTime) {
 // Function to display the sunrise and sunset times
 async function loadSunriseSunsetData(data) {
     const sunriseSunsetData = await getSunriseSunsetTime();
-    console.log(sunriseSunsetData)
     if (sunriseSunsetData) {
         const sunriseTime = new Date(sunriseSunsetData.sunrise).toLocaleTimeString();
         const sunsetTime = new Date(sunriseSunsetData.sunset).toLocaleTimeString();
