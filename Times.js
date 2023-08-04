@@ -1,9 +1,7 @@
-// Replace these with your latitude and longitude coordinates
-const latitude = 42.03326482384257;
-const longitude = -87.73497403508489;
-
 // Function to fetch sunrise and sunset times using the API
-async function getSunriseSunsetTime(latitude, longitude) {
+async function getSunriseSunsetTime() {
+    const latitude = 42.03326482384257;
+    const longitude = -87.73497403508489;
     const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key (sign up at https://sunrise-sunset.org/api)
     const url = `https://api.sunrise-sunset.org/json?lat=${latitude}&lng=${longitude}&date=today&formatted=0`;
 
@@ -25,10 +23,11 @@ function displaySunriseSunsetTimes(sunriseTime, sunsetTime) {
     
 }
 // Function to display the sunrise and sunset times
-function displaySunriseSunsetTime(data) {
-    if (data) {
-        const sunriseTime = new Date(data.sunrise).toLocaleTimeString();
-        const sunsetTime = new Date(data.sunset).toLocaleTimeString();
+async function loadSunriseSunsetData(data) {
+    const sunriseSunsetData = await fetchSunriseSunsetData();
+    if (sunriseSunsetData) {
+        const sunriseTime = new Date(sunriseSunsetData.sunrise).toLocaleTimeString();
+        const sunsetTime = new Date(sunriseSunsetData.sunset).toLocaleTimeString();
         displaySunriseSunsetTime(sunriseTime,sunsetTime);
         console.log('Sunrise Time:', sunriseTime);
         console.log('Sunset Time:', sunsetTime);
@@ -39,8 +38,3 @@ function displaySunriseSunsetTime(data) {
 }
 // Call the main function when the page finishes loading
 window.addEventListener('load', loadSunriseSunsetData);
-
-// Call the functions
-getSunriseSunsetTime(latitude, longitude)
-    .then(displaySunriseSunsetTime)
-    .catch((error) => console.error('Error:', error));
