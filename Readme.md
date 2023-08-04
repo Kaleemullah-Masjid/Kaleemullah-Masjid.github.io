@@ -2,7 +2,7 @@
 
 Welcome to the GitHub page of our local mosque! This repository is a place where we share information, updates, and resources related to our mosque community. Here, you will find details about our services, events, and ways to get involved. Feel free to explore and contribute to the growth of our community.
 
-[#Kaleemullah-Masjid.github.io]
+[Link to Website](Kaleemullah-Masjid.github.io)
 
 ## Table of Contents
 
