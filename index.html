@@ -5,57 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mosque in Skokie, Illinois</title>
     <style>
-        /* Add your custom CSS styles here */
+        :root {
+            --spacing: 1rem;
+        }
+
+        /* Base styles for all screens */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            font-size: 1.3vw;
-
         }
+
         header {
             background-color: #333;
             color: #fff;
-            text-align: center;
-            padding: 1rem;
-            font-size: 2.0vw;
         }
+
         nav {
             background-color: #444;
-            text-align: center;
-            padding: 0.5rem;
-            font-size: 1.5vw;
         }
+
         nav a {
             color: #fff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            font-size: 1.0vw;
         }
+
         nav a:hover {
             background-color: #555;
-            font-size: 1.0vw;
         }
-       table {
-           border-collapse: collapse;
-           margin:5px;
-       }
-       td, th {
-           border: 1px solid #999;
-           padding: 0.5rem;
-           text-align: left;
-}
+
+        table {
+            border-collapse: collapse;
+            margin: var(--spacing);
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: var(--spacing);
+        }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 2rem;
         }
+
         .center {
-              margin-left: auto;
-              margin-right: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Media query for smaller screens */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
             }
+
+            header {
+                font-size: 20px;
+            }
+
+            nav {
+                font-size: 16px;
+            }
+
+            nav a {
+                font-size: 12px;
+            }
+
+            th, td {
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
     </style>
+
 </head>
 <body>
     <header>
