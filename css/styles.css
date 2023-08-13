@@ -1,0 +1,164 @@
+:root {
+    --spacing: 1rem;
+}
+
+/* Base styles for all screens */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+}
+
+nav {
+    background-color: #444;
+}
+
+nav a {
+    color: #fff;
+}
+
+nav a:hover {
+    background-color: #555;
+}
+
+table {
+    border-collapse: collapse;
+    margin: var(--spacing);
+    width: 100%;
+}
+
+th,
+td {
+    border: 1px solid #999;
+    padding: var(--spacing);
+    text-align: left;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Add a card effect for articles */
+.card {
+    background-color: rgb(236, 252, 236);
+    padding: 20px;
+    margin-top: 20px;
+  }
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    header {
+        font-size: 20px;
+    }
+
+    nav {
+        font-size: 16px;
+        padding: 0;
+    }
+
+    nav a {
+        font-size: 12px;
+    }
+
+    th,
+    td {
+        font-size: 14px;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    .container {
+        padding: 1rem;
+    }
+}
+
+/* Media query for medium screens */
+@media (min-width: 769px) and (max-width: 1024px) {
+    body {
+        font-size: 16px;
+    }
+
+    header {
+        font-size: 24px;
+    }
+
+    nav {
+        font-size: 18px;
+        padding: 0;
+    }
+
+    nav a {
+        font-size: 14px;
+    }
+
+    th,
+    td {
+        font-size: 16px;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    .container {
+        padding: 1.5rem;
+    }
+}
+
+/* Media query for large screens */
+@media (min-width: 1025px) {
+    body {
+        font-size: 18px;
+    }
+
+    header {
+        font-size: 28px;
+    }
+
+    nav {
+        font-size: 20px;
+        padding: 0;
+    }
+
+    nav a {
+        font-size: 16px;
+    }
+
+    th,
+    td {
+        font-size: 18px;
+    }
+
+    table {
+        width: 80%;
+    }
+
+    .container {
+        padding: 2rem;
+    }
+}
