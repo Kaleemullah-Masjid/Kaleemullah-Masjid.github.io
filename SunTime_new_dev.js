@@ -128,7 +128,7 @@ function displayHijriDate(Hijri_date_t) {
     const Hijri_date_Cell = document.getElementById('Hijri');
     const today = new Date();
     const formattedDate = formatDate(today, format = 'DD-MMM-YYYY');
-    Hijri_date_Cell.innerHTML = `<b>Today is: </b> ${formattedDate} || ${Hijri_date_t}`;
+    Hijri_date_Cell.textContent = `<b>Today is: </b> ${formattedDate} || ${Hijri_date_t}`;
     
 }
 // Function to display the sunrise and sunset times on the HTML page
