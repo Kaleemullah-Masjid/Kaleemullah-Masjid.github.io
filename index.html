@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mosque in Skokie, Illinois</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
-    <script src="SunTime_new_dev.js"></script>
+    <script src="PrayerTimes.js"></script>
 </head>
 
 <body>
@@ -29,29 +29,48 @@
             <p id="Gregorian"></p>
             <p id="Hijri"></p>
 
-
-
             <table class="center" id="Prayer_Times_Table">
                 <thead>
                     <tr>
-                        <th style="text-align:center">FAJR</th>
-                        <th style="text-align:center">Sunrise</th>
-                        <th style="text-align:center">ZUHR</th>
-                        <th style="text-align:center">ASR</th>
-                        <th style="text-align:center">MAGRHEB</th>
-                        <th style="text-align:center">ISHA</th>
+                        <th style="text-align:center">Prayer</th>
+                        <th style="text-align:center">Jammat Time</th>
+                        <th style="text-align:center">ISNA Start Time</th>
                     </tr>
                 </thead>
-                <tr>
-                    <td>05:30 AM</td>
-                    <td id="sunriseTime"></td>
-                    <td>01:30 PM</td>
-                    <td>06:30 PM</td>
-                    <td id="sunsetTime"></td>
-                    <td>09:30 PM</td>
-                </tr>
-            </table>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center">Fajr</td>
+                        <td style="text-align:center">05:30 AM</td>
+                        <td style="text-align:center" id="FAJR_ISNA"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center">Sunrise</td>
+                        <td style="text-align:center" id="sunriseTime"></td>
+                        <td style="text-align:center" id="SUNRISE_ISNA"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center">ZUHR</td>
+                        <td style="text-align:center">01:30 PM</td>
+                        <td style="text-align:center" id="ZUHR_ISNA"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center">ASR</td>
+                        <td style="text-align:center">06:30 PM</td>
+                        <td style="text-align:center" id="ASR_ISNA"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center">MAGRHEB</td>
+                        <td style="text-align:center" id="sunsetTime"></td>
+                        <td style="text-align:center" id="MAGRHEB_ISNA"></td>
+                    </tr>
 
+                    <tr>
+                        <td style="text-align:center">ISHA</td>
+                        <td style="text-align:center">09:30 PM</td>
+                        <td style="text-align:center" id="ISHA_ISNA"></td>
+                    </tr>
+                </tbody>
+            </table>
 
             <table class="center" id="Jummah_Table">
                 <tr>

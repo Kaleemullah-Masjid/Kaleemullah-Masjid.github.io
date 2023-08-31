@@ -123,21 +123,13 @@ async function getSunriseSunsetTime() {
         return null;
     }
 }
-// Function to display the sunrise and sunset times on the HTML page
-function displayHijriDate(Hijri_date_t) {
-    const Hijri_date_Cell = document.getElementById('Hijri');
-    const today = new Date();
-    const formattedDate = formatDate(today, format = 'DD-MMM-YYYY');
-    Hijri_date_Cell.innerHTML = `<b>Today is: </b> ${formattedDate} || ${Hijri_date_t}`;
-    
-}
+
 // Function to display the sunrise and sunset times on the HTML page
 function displaySunriseSunsetTimes(sunriseTime, sunsetTime) {
     const sunsetTimeCell = document.getElementById('sunsetTime');
     const sunriseTimeCell = document.getElementById('sunriseTime');
     sunriseTimeCell.textContent = sunriseTime;
-    sunsetTimeCell.textContent = sunsetTime;
-    
+    sunsetTimeCell.textContent = sunsetTime;   
 }
 // Function to display the sunrise and sunset times on the HTML page
 function displayHijriDate(Today_Hijri_Date, Today_Date) {
@@ -145,11 +137,19 @@ function displayHijriDate(Today_Hijri_Date, Today_Date) {
     Hijri_date_Cell.innerHTML = `<b>Today is: </b> ${Today_Date} || ${Today_Hijri_Date}`;   
 }
 // Function to display the sunrise and sunset times on the HTML page
-function displaySunriseSunsetTimes(sunriseTime, sunsetTime) {
-    const sunsetTimeCell = document.getElementById('sunsetTime');
-    const sunriseTimeCell = document.getElementById('sunriseTime');
-    sunriseTimeCell.textContent = sunriseTime;
-    sunsetTimeCell.textContent = sunsetTime;
+function displayISNA(prayer_times) {
+    const FAJR_ISNA = document.getElementById('FAJR_ISNA');
+    const SUNRISE_ISNA = document.getElementById('SUNRISE_ISNA');
+    const ZUHR_ISNA = document.getElementById('ZUHR_ISNA');
+    const ASR_ISNA = document.getElementById('ASR_ISNA');
+    const MAGRHEB_ISNA = document.getElementById('MAGRHEB_ISNA');
+    const ISHA_ISNA = document.getElementById('ISHA_ISNA');
+    FAJR_ISNA.textContent = prayer_times['Fajr'];
+    SUNRISE_ISNA.textContent = prayer_times['Sunrise'];
+    ZUHR_ISNA.textContent = prayer_times['Dhuhr'];
+    ASR_ISNA.textContent = prayer_times['Asr'];
+    MAGRHEB_ISNA.textContent = prayer_times['Sunset'];
+    ISHA_ISNA.textContent = prayer_times['Isha'];
     
 }
 // Function to display the sunrise and sunset times
@@ -171,9 +171,11 @@ async function loadSunriseSunsetData() {
             const sunriseTime = new Date(sunriseSunsetData.sunrise).toLocaleTimeString();
             const sunsetTime = new Date(sunriseSunsetData.sunset).toLocaleTimeString();
             const Today_Hijri_Date = `${Today_Islamic_Dates.day}-${Today_Islamic_Dates.MONTH_ENG}-${Today_Islamic_Dates.year}`
-
+            //console.log(Today_Prayer_Times)
+            //console.log(Today_Islamic_Dates)
             displayHijriDate(Today_Hijri_Date,Today_Date);
             displaySunriseSunsetTimes(sunriseTime, sunsetTime);
+            displayISNA(Today_Prayer_Times);
         } else {
             console.log('Unable to fetch Islamic Date data.');
         }
