@@ -123,7 +123,6 @@ async function getSunriseSunsetTime() {
         return null;
     }
 }
-
 // Function to display the sunrise and sunset times on the HTML page
 function displaySunriseSunsetTimes(sunriseTime, sunsetTime) {
     const sunsetTimeCell = document.getElementById('sunsetTime');
