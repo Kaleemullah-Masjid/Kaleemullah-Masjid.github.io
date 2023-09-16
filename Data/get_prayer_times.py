@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 import datetime
 import json
+import os
 
 # Function to parse the JSON data from the API response
 def parse_data(response_text):
@@ -89,6 +90,17 @@ def main():
     updated_df = pd.concat([existing_df, new_rows])
     # Save the updated DataFrame to the CSV file
     updated_df.to_csv('Prayer_Times.csv')
+    updated_df_dict = updated_df.to_dict()
+
+    # Define the path to the text file containing the dictionary
+    file_path = 'Prayer_Times.txt'
+    # Step 1: Delete the previous text file (if it exists)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+    # Step 2: Write the updated dictionary back to the text file
+    with open(file_path, 'w') as file:
+        json.dump(updated_df_dict, file, indent=4)
+
 
 if __name__ == "__main__":
     main()
