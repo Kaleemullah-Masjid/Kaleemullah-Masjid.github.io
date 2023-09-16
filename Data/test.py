@@ -5,6 +5,8 @@ import logging
 
 def main():
     try:
+        #Log Start
+        logging.info("Update and push Started.")
         #Get today's Date
         cur_date = datetime.date.today()
 
@@ -29,6 +31,7 @@ def main():
         # Push to the repository
         subprocess.run(["git", "push"])
 
+        #Log Push
         logging.info("Update and push successful.")
     except subprocess.CalledProcessError as e:
         logging.error(f"Subprocess error: {e}")
@@ -39,5 +42,4 @@ if __name__ == "__main__":
     # Configure logging
     log_file = './logs/update_log.txt'
     logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    
     main()
