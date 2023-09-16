@@ -37,7 +37,7 @@ def main():
 
 if __name__ == "__main__":
     # Configure logging
-    log_file = 'update_log.txt'
+    log_file = './logs/update_log.txt'
     logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     
     main()
