@@ -94,7 +94,7 @@ def main():
     updated_df_dict = updated_df.to_dict()
 
     # Define the path to the text file containing the dictionary
-    file_path = 'Prayer_Times.txt'
+    file_path = 'Prayer_Times.json'
     # Step 1: Delete the previous text file (if it exists)
     if os.path.exists(file_path):
         os.remove(file_path)
