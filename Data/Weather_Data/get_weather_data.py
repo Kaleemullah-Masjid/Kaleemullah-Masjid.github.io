@@ -72,34 +72,56 @@ def parse_request(response):
 
 def main():
      # Define latitude and longitude coordinates, and get the current year and month
-    lat = 42.03326482384257
-    long = -87.73497403508489
+
     cur_year = datetime.date.today().year
     cur_month = datetime.date.today().month
-    #Example Request:  http://api.aladhan.com/v1/calendar/2017/4?latitude=51.508515&longitude=-0.1254872&method=2
-    apiUrl = f'https://api.aladhan.com/v1/calendar/{cur_year}/{cur_month}?latitude={lat}&longitude={long}&school=1;'
+    #Example Request:  https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+    
+    with open('api_key.txt') as file:
+        api_key = file.readline()
+    apiUrl = f'https://api.weather.gov/gridpoints/LOT/71,80/forecast'
     # Perform the HTTP GET request
-    req_data = requests.get(apiUrl)
-    # Call the function to handle the API response and display prayer times
-    new_df  = parse_request(req_data)
-    # Load the existing DataFrame from the CSV file with "Date" as the index
-    existing_df = pd.read_csv('Prayer_Times.csv', index_col='Date')
-    # Identify rows that are not already present in the existing DataFrame
-    new_rows = new_df[~new_df.index.isin(existing_df.index)]
-    # Append the new rows to the existing DataFrame
-    updated_df = pd.concat([existing_df, new_rows])
-    # Save the updated DataFrame to the CSV file
-    updated_df.to_csv('Prayer_Times.csv')
-    updated_df_dict = updated_df.to_dict()
+    #req_data = requests.get(apiUrl)
+    #req_data_txt = req_data.text
+    #req_data_txt = req_data_txt.strip()
+    #req_data_txt = json.loads(req_data_txt)
 
-    # Define the path to the text file containing the dictionary
-    file_path = 'Prayer_Times.txt'
-    # Step 1: Delete the previous text file (if it exists)
-    if os.path.exists(file_path):
-        os.remove(file_path)
-    # Step 2: Write the updated dictionary back to the text file
-    with open(file_path, 'w') as file:
-        json.dump(updated_df_dict, file, indent=4)
+    with open('weather.json', 'r') as file:
+        file_txt = file.read()
+        req_data_txt = json.loads(file_txt)
+    def get_cur_temp(data):
+        temp_1_0_0 = data['number']
+        temp_1_0_1 = data['name']
+        temp_1_0_2 = data['startTime']
+        temp_1_0_3 = data['endTime']
+        temp_1_1 = data['temperature']
+        temp_1_2 = data['probabilityOfPrecipitation']['value']
+        temp_1_3 = data['dewpoint']['value']
+        temp_1_4 = data['relativeHumidity']['value']
+        temp_1_5 = data['shortForecast']
+        temp_data = [temp_1_0_0,temp_1_0_1,temp_1_0_2,temp_1_0_3,temp_1_1,temp_1_2,temp_1_3,temp_1_4,temp_1_5]
+        temp_df = pd.DataFrame([temp_data],columns=[['Number','Name','startTime','endTime','Temperature','probabilityOfPrecipitation','dewpoint','relativeHumidity','shortForecast']])
+        return(temp_df)
+
+    cur_date = datetime.date.today()
+    tmrw_date = cur_date + datetime.timedelta(days=1)
+    print(cur_date)
+    req_data_txt_0 = get_cur_temp(req_data_txt['properties']['periods'][0])
+    req_data_txt_1 = get_cur_temp(req_data_txt['properties']['periods'][1])
+    req_data_txt_2 = get_cur_temp(req_data_txt['properties']['periods'][2])
+    req_data_txt_3 = get_cur_temp(req_data_txt['properties']['periods'][3])
+    req_data_txt_0['Date'] = cur_date
+    req_data_txt_1['Date'] = cur_date
+    req_data_txt_2['Date'] = tmrw_date
+    req_data_txt_3['Date'] = tmrw_date
+    req_data_txt_ = pd.concat([req_data_txt_0,req_data_txt_1,req_data_txt_2,req_data_txt_3])
+
+    print(req_data_txt_)
+
+    #with open('weather.json', 'w') as file:
+    #    json.dump(req_data_txt,file)
+    # Call the function to handle the API response and display prayer times
+    #print(apiUrl,r'\n',req_data.text)
 
 
 if __name__ == "__main__":
