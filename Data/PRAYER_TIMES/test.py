@@ -18,6 +18,7 @@ def main():
         current_directory = os.getcwd()
         # Get the parent directory's path
         parent_directory = os.path.dirname(current_directory)
+        parent_directory = os.path.dirname(parent_directory)
         os.chdir(parent_directory)
 
         # Run Git commands
