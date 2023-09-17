@@ -77,8 +77,10 @@ def main():
     cur_year = datetime.date.today().year
     cur_month = datetime.date.today().month
     cur_month_1 = datetime.date.today().month + 1
+    
     #Example Request:  http://api.aladhan.com/v1/calendar/2017/4?latitude=51.508515&longitude=-0.1254872&method=2
     apiUrl = f'https://api.aladhan.com/v1/calendar/{cur_year}/{cur_month_1}?latitude={lat}&longitude={long}&school=1;'
+    print(cur_month_1,apiUrl)
     # Perform the HTTP GET request
     req_data = requests.get(apiUrl)
     # Call the function to handle the API response and display prayer times
