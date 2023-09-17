@@ -100,7 +100,7 @@ def main():
         os.remove(file_path)
     # Step 2: Write the updated dictionary back to the text file
     with open(file_path, 'w') as file:
-        json.dump(updated_df_dict, file, indent=4)
+        json.dump(updated_df_dict, file)
 
 
 if __name__ == "__main__":
