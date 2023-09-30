@@ -22,6 +22,22 @@ def parse_data(response_text):
         df_prayer_times = pd.concat([df_prayer_times,temp_prayer_times])
     return(df_prayer_times)
 
+def get_cur_temp(data):
+    temp_1_0_0 = data['number']
+    temp_1_0_1 = data['name']
+    temp_1_0_2 = data['startTime']
+    temp_1_0_3 = data['endTime']
+    temp_1_1 = data['temperature']
+    temp_1_2 = data['probabilityOfPrecipitation']['value']
+    temp_1_3 = data['dewpoint']['value']
+    temp_1_4 = data['relativeHumidity']['value']
+    temp_1_5 = data['shortForecast']
+    temp_data = [temp_1_0_0,temp_1_0_1,temp_1_0_2,temp_1_0_3,temp_1_1,temp_1_2,temp_1_3,temp_1_4,temp_1_5]
+    temp_df = pd.DataFrame([temp_data],columns=[['Number','Name','startTime','endTime','Temperature','probabilityOfPrecipitation','dewpoint','relativeHumidity','shortForecast']])
+    return(temp_df)
+
+
+
 # Function to convert 24-hour time strings to AM/PM format
 def convert_time(pd_series,prayer_name):
     # Split the time strings into parts, extract and convert the time, then format it
@@ -48,6 +64,7 @@ def parse_request(response):
     # Check if the request was successful (status code 200)
     if response.status_code == 200:
         # Print the content of the response (the web page content)
+        req_data_txt = json.loads(response.text)
         prayer_times = parse_data(response.text)
         #GET PRAYER NAMES 
         prayer_names = prayer_times.columns.tolist()[1:]
@@ -89,19 +106,6 @@ def main():
     with open('weather.json', 'r') as file:
         file_txt = file.read()
         req_data_txt = json.loads(file_txt)
-    def get_cur_temp(data):
-        temp_1_0_0 = data['number']
-        temp_1_0_1 = data['name']
-        temp_1_0_2 = data['startTime']
-        temp_1_0_3 = data['endTime']
-        temp_1_1 = data['temperature']
-        temp_1_2 = data['probabilityOfPrecipitation']['value']
-        temp_1_3 = data['dewpoint']['value']
-        temp_1_4 = data['relativeHumidity']['value']
-        temp_1_5 = data['shortForecast']
-        temp_data = [temp_1_0_0,temp_1_0_1,temp_1_0_2,temp_1_0_3,temp_1_1,temp_1_2,temp_1_3,temp_1_4,temp_1_5]
-        temp_df = pd.DataFrame([temp_data],columns=[['Number','Name','startTime','endTime','Temperature','probabilityOfPrecipitation','dewpoint','relativeHumidity','shortForecast']])
-        return(temp_df)
 
     cur_date = datetime.date.today()
     tmrw_date = cur_date + datetime.timedelta(days=1)
