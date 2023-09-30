@@ -1,0 +1,1 @@
+"C:\Users\salik\AppData\Local\Programs\Python\Python311\python.exe" "C:\Users\salik\Documents\GitHub\Kaleemullah-Masjid.github.io\Data\PRAYER_TIMES\test.py"
