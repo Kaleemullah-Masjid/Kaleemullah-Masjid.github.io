@@ -3,7 +3,21 @@ import requests
 import datetime
 import json
 import os
+from sqlalchemy import create_engine
 
+# Function to Request the API
+def request_data():
+     # Define latitude and longitude coordinates, and get the current year and month
+    lat = 42.03326482384257
+    long = -87.73497403508489
+    cur_year = datetime.date.today().year
+    cur_month = datetime.date.today().month
+    cur_month_1 = datetime.date.today().month + 1
+    #Example Request:  http://api.aladhan.com/v1/calendar/2017/4?latitude=51.508515&longitude=-0.1254872&method=2
+    apiUrl = f'https://api.aladhan.com/v1/calendar/{cur_year}/{cur_month_1}?latitude={lat}&longitude={long}&school=1;'
+    # Perform the HTTP GET request
+    req_data = requests.get(apiUrl)
+    return(req_data)
 # Function to parse the JSON data from the API response
 def parse_data(response_text):
     # Parse the JSON response and access the 'data' key
@@ -21,7 +35,6 @@ def parse_data(response_text):
         # Concatenate the temporary DataFrame to the main DataFrame
         df_prayer_times = pd.concat([df_prayer_times,temp_prayer_times])
     return(df_prayer_times)
-
 # Function to convert 24-hour time strings to AM/PM format
 def convert_time(pd_series,prayer_name):
     # Split the time strings into parts, extract and convert the time, then format it
@@ -42,7 +55,7 @@ def convert_time(pd_series,prayer_name):
     pd_series_new = pd.DataFrame(time_parts_list_new,columns=[prayer_name])
     
     return pd_series_new
-
+# Function to put prayer times dataframe together
 def parse_request(response):
     # Function to handle the API response and display the data
     # Check if the request was successful (status code 200)
@@ -69,18 +82,19 @@ def parse_request(response):
         return(prayer_times_new)
     else:
         print(f"Request failed with status code {response.status_code}")
-
+def load_data(df):
+    #Connect o SQLite database
+    engine = create_engine('sqlite:///Mosque.db')
+    table_name = 'Prayer_Times'
+    existing_ids = pd.read_sql_query(f"SELECT Date FROM {table_name}", engine)['Date'].tolist()
+    df = df[~df['Date'].isin(existing_ids)]  
+    # Append DataFrame to the SQLite table
+    if not df.empty:
+        df.to_sql(table_name, con=engine, if_exists='append', index=False)
+    #Commit changes if needed
+    engine.dispose()
 def main():
-     # Define latitude and longitude coordinates, and get the current year and month
-    lat = 42.03326482384257
-    long = -87.73497403508489
-    cur_year = datetime.date.today().year
-    cur_month = datetime.date.today().month
-    cur_month_1 = datetime.date.today().month + 1
-    #Example Request:  http://api.aladhan.com/v1/calendar/2017/4?latitude=51.508515&longitude=-0.1254872&method=2
-    apiUrl = f'https://api.aladhan.com/v1/calendar/{cur_year}/{cur_month_1}?latitude={lat}&longitude={long}&school=1;'
-    # Perform the HTTP GET request
-    req_data = requests.get(apiUrl)
+    req_data = request_data()
     # Call the function to handle the API response and display prayer times
     new_df  = parse_request(req_data)
     # Load the existing DataFrame from the CSV file with "Date" as the index
