@@ -98,23 +98,8 @@ def main():
     # Call the function to handle the API response and display prayer times
     new_df  = parse_request(req_data)
     # Load the existing DataFrame from the CSV file with "Date" as the index
-    existing_df = pd.read_csv('Prayer_Times.csv', index_col='Date')
-    # Identify rows that are not already present in the existing DataFrame
-    new_rows = new_df[~new_df.index.isin(existing_df.index)]
-    # Append the new rows to the existing DataFrame
-    updated_df = pd.concat([existing_df, new_rows])
-    # Save the updated DataFrame to the CSV file
-    updated_df.to_csv('Prayer_Times.csv')
-    updated_df_dict = updated_df.to_dict()
+    load_data(new_df)
 
-    # Define the path to the text file containing the dictionary
-    file_path = 'Prayer_Times.json'
-    # Step 1: Delete the previous text file (if it exists)
-    if os.path.exists(file_path):
-        os.remove(file_path)
-    # Step 2: Write the updated dictionary back to the text file
-    with open(file_path, 'w') as file:
-        json.dump(updated_df_dict, file)
 
 
 if __name__ == "__main__":
