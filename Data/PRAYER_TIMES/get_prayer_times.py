@@ -87,6 +87,8 @@ def load_data(df):
     engine = create_engine('sqlite:///Mosque.db')
     table_name = 'Prayer_Times'
     existing_ids = pd.read_sql_query(f"SELECT Date FROM {table_name}", engine)['Date'].tolist()
+    print(f'_-------------_____ {df.columns}')
+    
     df = df[~df['Date'].isin(existing_ids)]  
     # Append DataFrame to the SQLite table
     if not df.empty:
