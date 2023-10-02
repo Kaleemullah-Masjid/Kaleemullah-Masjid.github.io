@@ -76,8 +76,6 @@ def parse_request(response):
             new_time = convert_time(time_0,prayer_name)
             prayer_times_new[prayer_name] = new_time
         # Display the new DataFrame with AM/PM prayer times
-
-        prayer_times_new = prayer_times_new.set_index('Date')
         prayer_times_new['Date_Added'] = datetime.date.today()
         return(prayer_times_new)
     else:
@@ -87,8 +85,6 @@ def load_data(df):
     engine = create_engine('sqlite:///Mosque.db')
     table_name = 'Prayer_Times'
     existing_ids = pd.read_sql_query(f"SELECT Date FROM {table_name}", engine)['Date'].tolist()
-    print(f'_-------------_____ {df.columns}')
-    
     df = df[~df['Date'].isin(existing_ids)]  
     # Append DataFrame to the SQLite table
     if not df.empty:
