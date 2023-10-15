@@ -2,7 +2,6 @@ import pandas as pd
 import requests
 import datetime
 import json
-import os
 from sqlalchemy import create_engine
 
 # Function to Request the API
@@ -83,8 +82,11 @@ def parse_request(response):
 def load_data(df):
     #Connect o SQLite database
     engine = create_engine('sqlite:///Mosque.db')
+    #Set Table Name
     table_name = 'Prayer_Times'
+    #Define SQL Query to get unique dates in table
     existing_ids = pd.read_sql_query(f"SELECT Date FROM {table_name}", engine)['Date'].tolist()
+    #Filter out Already Ran Dates
     df = df[~df['Date'].isin(existing_ids)]  
     # Append DataFrame to the SQLite table
     if not df.empty:
@@ -97,8 +99,5 @@ def main():
     new_df  = parse_request(req_data)
     # Load the existing DataFrame from the CSV file with "Date" as the index
     load_data(new_df)
-
-
-
 if __name__ == "__main__":
     main()

@@ -2,7 +2,15 @@ import pandas as pd
 import requests
 import datetime
 import json
-import os
+from sqlalchemy import create_engine
+
+# Function to Request the API
+def request_data():
+    #Example Request:  https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+    apiUrl = f'https://api.weather.gov/gridpoints/LOT/71,80/forecast'
+    # Perform the HTTP GET request
+    req_data = requests.get(apiUrl).text.strip()
+    return(req_data)
 
 # Function to parse the JSON data from the API response
 def parse_data(response_text):
@@ -36,26 +44,21 @@ def parse_data(response_text):
     df['Hour'] = df['startTime'].dt.strftime('%H')
     df['Date_Created'] = datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
     return(df)
-def concat_data(dataframe):
-    df = pd.read_csv('Weather_Data.csv')
-    df = pd.concat([df,dataframe])
+def concat_data(df):
+    #Connect o SQLite database
+    engine = create_engine('sqlite:///Weather_Data.db')
+    #Set Table Name
+    table_name = 'Weather_Forcast'
+    # Append DataFrame to the SQLite table
+    if not df.empty:
+        df.to_sql(table_name, con=engine, if_exists='append', index=False)
+    #Commit changes if needed
+    engine.dispose()
     return(df)
 def main():
-    #Example Request:  https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
-    apiUrl = f'https://api.weather.gov/gridpoints/LOT/71,80/forecast'
-    # Perform the HTTP GET request
-    req_data = requests.get(apiUrl)
-    req_data_txt = req_data.text
-    req_data_txt = req_data_txt.strip()
-
-    df_weather_forcast = parse_data(req_data_txt)
+    req_data = request_data()
+    df_weather_forcast = parse_data(req_data)
     df_weather_forcast = concat_data(df_weather_forcast)
-    df_weather_forcast.to_csv('Weather_Data.csv', index=None)
-
-#    with open('weather.json', 'w') as file:
-        #json.dump(df_weather_forcast.to_json(),file)
-    # Call the function to handle the API response and display prayer times
-    #print(apiUrl,r'\n',req_data.text)
 
 
 if __name__ == "__main__":

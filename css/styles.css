@@ -17,10 +17,13 @@ header {
 
 nav {
     background-color: #444;
+    text-align: center;
 }
 
 nav a {
     color: #fff;
+    margin: 0 10px;
+    font-size: 35px; /* Adjust the font size as needed */
 }
 
 nav a:hover {
@@ -97,7 +100,7 @@ transition: max-height 0.2s ease-out;
     }
 
     nav a {
-        font-size: 12px;
+        font-size: 15px;
     }
 
     th,
@@ -130,7 +133,7 @@ transition: max-height 0.2s ease-out;
     }
 
     nav a {
-        font-size: 14px;
+        font-size: 20px;
     }
 
     th,
@@ -163,7 +166,7 @@ transition: max-height 0.2s ease-out;
     }
 
     nav a {
-        font-size: 16px;
+        font-size: 25px;
     }
 
     th,
