@@ -2,9 +2,17 @@ import pandas as pd
 import requests
 import datetime
 import json
-from sqlalchemy import create_engine
 
 # Function to Request the API
+def request_data_input(year,month):
+     # Define latitude and longitude coordinates, and get the current year and month
+    lat = 42.03326482384257
+    long = -87.73497403508489
+    #Example Request:  http://api.aladhan.com/v1/calendar/2017/4?latitude=51.508515&longitude=-0.1254872&method=2
+    apiUrl = f'https://api.aladhan.com/v1/calendar/{year}/{month}?latitude={lat}&longitude={long}&school=1;'
+    # Perform the HTTP GET request
+    req_data = requests.get(apiUrl)
+    return(req_data)
 def request_data():
      # Define latitude and longitude coordinates, and get the current year and month
     lat = 42.03326482384257
@@ -22,7 +30,7 @@ def parse_data(response_text):
     # Parse the JSON response and access the 'data' key
     resp_data = json.loads(response_text)['data']
     # Create an empty DataFrame to store prayer times
-    df_prayer_times = pd.DataFrame(columns=['Date','Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Sunset', 'Maghrib', 'Isha', 'Imsak','Midnight', 'Firstthird', 'Lastthird'])
+    df_prayer_times = pd.DataFrame(columns=['Date','Islamic_Date','Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Sunset', 'Maghrib', 'Isha', 'Imsak','Midnight', 'Firstthird', 'Lastthird'])
     # Loop through the data and extract prayer timings and dates
     for a in resp_data:
         prayer_timings = a['timings']
@@ -31,6 +39,7 @@ def parse_data(response_text):
         temp_prayer_times = pd.DataFrame.from_dict([prayer_timings])
         # Add a 'Date' column with the human-readable date
         temp_prayer_times['Date'] = prayer_dates['readable']
+        temp_prayer_times['Islamic_Date'] = prayer_dates['hijri']['date']
         # Concatenate the temporary DataFrame to the main DataFrame
         df_prayer_times = pd.concat([df_prayer_times,temp_prayer_times])
     return(df_prayer_times)
@@ -62,11 +71,13 @@ def parse_request(response):
         # Print the content of the response (the web page content)
         prayer_times = parse_data(response.text)
         #GET PRAYER NAMES 
-        prayer_names = prayer_times.columns.tolist()[1:]
+        prayer_names = prayer_times.columns.tolist()[2:]
          # Create a new DataFrame to store prayer times in AM/PM format
         prayer_times_new = pd.DataFrame(columns=prayer_times.columns.to_list())
         # Set the 'Date' column in the new DataFrame
         prayer_times_new['Date'] = prayer_times['Date']
+        # Set the 'Date' column in the new DataFrame
+        prayer_times_new['Islamic_Date'] = prayer_times['Islamic_Date']
         # Reset the index for the new DataFrame
         prayer_times_new = prayer_times_new.reset_index(drop=True)
         # Convert and replace each prayer time column with the AM/PM format
@@ -79,25 +90,27 @@ def parse_request(response):
         return(prayer_times_new)
     else:
         print(f"Request failed with status code {response.status_code}")
-def load_data(df):
-    #Connect o SQLite database
-    engine = create_engine('sqlite:///Mosque.db')
-    #Set Table Name
-    table_name = 'Prayer_Times'
-    #Define SQL Query to get unique dates in table
-    existing_ids = pd.read_sql_query(f"SELECT Date FROM {table_name}", engine)['Date'].tolist()
-    #Filter out Already Ran Dates
-    df = df[~df['Date'].isin(existing_ids)]  
-    # Append DataFrame to the SQLite table
-    if not df.empty:
-        df.to_sql(table_name, con=engine, if_exists='append', index=False)
-    #Commit changes if needed
-    engine.dispose()
 def main():
-    req_data = request_data()
+    i = 0
+
+    for year in range(2020,2024):
+        for month in range(1,13):
+            if i == 0:
+                req_data = request_data_input(year,month)
+                req_data  = parse_request(req_data)
+                i += 1
+            else:
+                temp_data = request_data_input(year,month)
+                temp_data  = parse_request(temp_data)
+                req_data = pd.concat([req_data,temp_data])
+                i += 1
+    
     # Call the function to handle the API response and display prayer times
-    new_df  = parse_request(req_data)
+    
     # Load the existing DataFrame from the CSV file with "Date" as the index
-    load_data(new_df)
+    #df = pd.read_csv('PRAYER_TIMES.csv')
+    #df_new = pd.concat([new_df,df])
+    req_data.to_csv('PRAYER_TIMES.csv',index=None)
+    
 if __name__ == "__main__":
     main()
