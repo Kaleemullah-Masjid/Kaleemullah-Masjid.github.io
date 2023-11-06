@@ -1,18 +1,20 @@
+// main.js
+
+// Function to format a date according to the specified format
 async function formatDate(date, format = 'DD-MM-YYYY') {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so add 1
     const year = date.getFullYear();
     const month_str = months[date.getMonth()];
-    ///////////////
-    // MMM Month
-    ///////////////
+
+     // Determine the date format and return the formatted date string
     if (format === 'DD-MM-YYYY') {          ////  "DD-MM-YYYY": Day-Month-Year (e.g., 23-08-2023)
         return `${day}-${month}-${year}`;
     } else if (format === 'MM/DD/YYYY') {   //"MM/DD/YYYY": Month/Day/Year (e.g., 08/23/2023)
         return `${month}/${day}/${year}`;
     } else if (format === 'YYYY-MM-DD') {   //"YYYY-MM-DD": Year-Month-Day (e.g., 2023-08-23)
-        return `${year}-${month}-${day}`;   
+        return `${year}-${month}-${day}`;
     } else if (format === 'YYYY/MM/DD') {   //"YYYY/MM/DD": Year/Month/Day (e.g., 2023/08/23)
         return `${year}-${month}-${day}`;
     } else if (format === 'DD/MM/YYYY') {   //"DD/MM/YYYY": Day/Month/Year (e.g., 23/08/2023)
@@ -30,84 +32,77 @@ async function formatDate(date, format = 'DD-MM-YYYY') {
         return `${day}-${month_str}-${year}`;
     }
 }
-async function get_islamic_data() {
-    //Get Today's Date
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1; // Months are zero-based, so add 1
-    //Kaleemullah Masjid Lat & Long
-    const lat = 42.03326482384257;
-    const long = -87.73497403508489;
-    //Prayer Time EndPoint
-    //Example Request:  http://api.aladhan.com/v1/calendar/2017/4?latitude=51.508515&longitude=-0.1254872&method=2
-    const apiUrl = `https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${lat}&longitude=${long}&school=1`;
+
+async function format_Islamic_Date(date){
+    const_islamic_dates = {1: 'Muharram'
+        , 2:'Safar'
+        , 3:'Rabi al-Awwal'
+        , 4:'Rabi al-Thani'
+        , 5:'Jumada al-Awwal'
+        , 6:'Jumada al-Thani'
+        , 7:'Rajab'
+        , 8:"Shaban"
+        , 9:'Ramadan'
+        , 10:'Shawwal'
+        , 11:'Dhu al-Qadah'
+        , 12:'Dhu al-Hijjah'
+    }
+    islamic_date_list = date.split('-')
+    islamic_month = parseInt(islamic_date_list[1])
+    islamic_month_str = const_islamic_dates[islamic_month]
+    islamic_date_list_new = islamic_date_list
+    islamic_date_list_new[1] = islamic_month_str
+
+    new_islamic_date = islamic_date_list_new.join('-')
+    
+    return(new_islamic_date)
+
+}
+// Function to parse CSV data and convert it into an array of objects
+async function parseCSV(csv) {
+    const lines = csv.split('\n');
+    const headers = lines[0].split(',');
+    const data = [];
+
+    for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',');
+        const entry = {};
+
+        for (let j = 0; j < headers.length; j++) {
+            entry[headers[j]] = values[j];
+        }
+
+        data.push(entry);
+    }
+
+    return data;
+}
+
+// Function to fetch CSV data from a GitHub URL
+async function fetchCsvFromGitHub() {
+    const githubRawUrl = 'https://raw.githubusercontent.com/Kaleemullah-Masjid/Kaleemullah-Masjid.github.io/main/Data/PRAYER_TIMES/PRAYER_TIMES.csv'; // Replace with your GitHub URL
 
     try {
-        //Fetch Response
-        const response = await fetch(apiUrl);
-        //Collect Response Data
-        const data = await response.json();
-        //Check to see if Good Response 
-        if (response.ok && data.code === 200) {
-            //Return Data
-            return (data.data);
+        const response = await fetch(githubRawUrl);
+        if (response.ok) {
+            const csvData = await response.text();
+            // Process the CSV data here
+            const today = new Date();
+            const today_str = await formatDate(today, format = 'DD MMM YYYY');
+            const data_csv = await parseCSV(csvData);
+            const filteredData = data_csv.filter(entry => entry.Date === today_str);
+
+            return(filteredData)
+
         } else {
-            console.error('Failed to fetch Islamic Prayer Times.');
-            return null;
+            throw new Error('Failed to fetch CSV file');
         }
     } catch (error) {
-        console.error('Error fetching Islamic Prayer Times:', error);
-        return null;
+        console.error(error);
     }
 }
-async function get_Prayer_Times(data) {
-    //Create Prayer Times Table
-    const prayer_times_dict = {}
-    //For Every Row get Prayer Times
-    for(const row in data) {
-        date_x = data[row].date.readable
-        prayer_times = data[row].timings
-        prayer_times_dict[date_x] = prayer_times
-    }
-    //Return Prayer Times
-    return(prayer_times_dict)
-}
-async function get_Islamic_Dates(data) {
-    //Create Prayer Times Table
-    const prayer_times_dict = {}
-    //For Every Row get Prayer Times
-    for(const row in data) {
-        date_x = data[row].date.readable
-        prayer_times = data[row].date.hijri
-        prayer_times_dict[date_x] = prayer_times
-        prayer_times_dict[date_x]['MONTH_ENG'] = data[row].date.hijri.designation.expanded
-        prayer_times_dict[date_x]['MONTH_ENG'] = data[row].date.hijri.month.en
-        prayer_times_dict[date_x]['MONTH_ARABIC'] = data[row].date.hijri.month.ar
-        prayer_times_dict[date_x]['WEEKDAY_ENG'] = data[row].date.hijri.weekday.en
-        prayer_times_dict[date_x]['WEEKDAY_ARABIC'] = data[row].date.hijri.month.ar
-    }
-    //Return Prayer Times
-    return(prayer_times_dict)
-}
-function armyTimeToAMPM(armyTime) {
-    const [hour, minute] = armyTime.split(':').map(Number);
-    const period = hour >= 12 ? 'PM' : 'AM';
-    const hour12 = hour % 12 || 12;
-    return `${hour12}:${minute.toString().padStart(2, '0')} ${period}`;
-}
-function convertTimesToAMPM(timesObject) {
-    const convertedTimes = {};
-    for (const date in timesObject) {
-        convertedTimes[date] = {};
-        for (const prayer in timesObject[date]) {
-            const armyTime = timesObject[date][prayer].split(' ')[0];
-            const ampmTime = armyTimeToAMPM(armyTime);
-            convertedTimes[date][prayer] = `${ampmTime}`;
-        }
-    }
-    return convertedTimes;
-}
-// Function to fetch sunrise and sunset times using the API
+
+// Function to fetch sunrise and sunset times from an API
 async function getSunriseSunsetTime() {
     const latitude = 42.03326482384257;
     const longitude = -87.73497403508489;
@@ -125,65 +120,53 @@ async function getSunriseSunsetTime() {
 }
 
 // Function to display the sunrise and sunset times on the HTML page
-function displaySunriseSunsetTimes(sunriseTime, sunsetTime) {
+async function displaySunriseSunsetTimes() {
+    const sunriseSunsetData = await getSunriseSunsetTime();
+    const sunriseTime = new Date(sunriseSunsetData.sunrise).toLocaleTimeString();
+    const sunsetTime = new Date(sunriseSunsetData.sunset).toLocaleTimeString();
     const sunsetTimeCell = document.getElementById('sunsetTime');
     const sunriseTimeCell = document.getElementById('sunriseTime');
     sunriseTimeCell.textContent = sunriseTime;
     sunsetTimeCell.textContent = sunsetTime;   
 }
-// Function to display the sunrise and sunset times on the HTML page
-function displayHijriDate(Today_Hijri_Date, Today_Date) {
-    const Hijri_date_Cell = document.getElementById('Hijri');
-    Hijri_date_Cell.innerHTML = `<b>Today is: </b> ${Today_Date} || ${Today_Hijri_Date}`;   
-}
-// Function to display the sunrise and sunset times on the HTML page
-function displayISNA(prayer_times) {
-    const FAJR_ISNA = document.getElementById('FAJR_ISNA');
-    const SUNRISE_ISNA = document.getElementById('SUNRISE_ISNA');
-    const ZUHR_ISNA = document.getElementById('ZUHR_ISNA');
-    const ASR_ISNA = document.getElementById('ASR_ISNA');
-    const MAGRHEB_ISNA = document.getElementById('MAGRHEB_ISNA');
-    const ISHA_ISNA = document.getElementById('ISHA_ISNA');
-    FAJR_ISNA.textContent = prayer_times['Fajr'];
-    SUNRISE_ISNA.textContent = prayer_times['Sunrise'];
-    ZUHR_ISNA.textContent = prayer_times['Dhuhr'];
-    ASR_ISNA.textContent = prayer_times['Asr'];
-    MAGRHEB_ISNA.textContent = prayer_times['Sunset'];
-    ISHA_ISNA.textContent = prayer_times['Isha'];
-    
-}
-// Function to display the sunrise and sunset times
-async function loadSunriseSunsetData() {
-    const sunriseSunsetData = await getSunriseSunsetTime();
-    const Islamic_Data = await get_islamic_data();
-    const Prayer_Times_Army = await get_Prayer_Times(Islamic_Data);
-    const Prayer_Times_AM_PM = convertTimesToAMPM(Prayer_Times_Army);
-    const Islamic_Dates = await get_Islamic_Dates(Islamic_Data);
-    const today = new Date();
-    today_str = await formatDate(today, format='DD MMM YYYY');
-    Today_Date = await formatDate(today, format='DD-MMM-YYYY');
 
-    const Today_Prayer_Times = await Prayer_Times_AM_PM[today_str];
-    const Today_Islamic_Dates = await Islamic_Dates[today_str];
 
-    if (sunriseSunsetData) {
-        if (Today_Islamic_Dates) {
-            const sunriseTime = new Date(sunriseSunsetData.sunrise).toLocaleTimeString();
-            const sunsetTime = new Date(sunriseSunsetData.sunset).toLocaleTimeString();
-            const Today_Hijri_Date = `${Today_Islamic_Dates.day}-${Today_Islamic_Dates.MONTH_ENG}-${Today_Islamic_Dates.year}`
-            //console.log(Today_Prayer_Times)
-            //console.log(Today_Islamic_Dates)
-            displayHijriDate(Today_Hijri_Date,Today_Date);
-            displaySunriseSunsetTimes(sunriseTime, sunsetTime);
-            displayISNA(Today_Prayer_Times);
+
+// Function to display prayer times and Islamic date on the HTML page
+async function displayISNA() {
+    try {
+        // Fetch sunrise and sunset times and prayer times
+        await displaySunriseSunsetTimes();
+        const prayer_temp = await fetchCsvFromGitHub();
+        if (prayer_temp.length > 0) {
+            //PULL FIRST ROW DATA
+            const prayer_times = prayer_temp[0]
+            //GET NEW ISLAMIC DATE
+            const new_islamic_date = await format_Islamic_Date(prayer_times['Islamic_Date'])
+            //GET DOCUMENT IDs 
+            const FAJR_ISNA = document.getElementById('FAJR_ISNA');
+            const SUNRISE_ISNA = document.getElementById('SUNRISE_ISNA');
+            const ZUHR_ISNA = document.getElementById('ZUHR_ISNA');
+            const ASR_ISNA = document.getElementById('ASR_ISNA');
+            const MAGRHEB_ISNA = document.getElementById('MAGRHEB_ISNA');
+            const ISHA_ISNA = document.getElementById('ISHA_ISNA');
+            const Hijri_date_Cell = document.getElementById('Hijri');
+            
+            // Display prayer times and Islamic date
+            Hijri_date_Cell.innerHTML = `<b>Today is: </b> ${prayer_times['Date']} || ${new_islamic_date}`;
+            FAJR_ISNA.textContent = prayer_times['Fajr'];
+            SUNRISE_ISNA.textContent = prayer_times['Sunrise'];
+            ZUHR_ISNA.textContent = prayer_times['Dhuhr'];
+            ASR_ISNA.textContent = prayer_times['Asr'];
+            MAGRHEB_ISNA.textContent = prayer_times['Maghrib'];
+            ISHA_ISNA.textContent = prayer_times['Isha'];
         } else {
-            console.log('Unable to fetch Islamic Date data.');
+            console.error('No prayer data available for today.');
         }
-        
-    } else {
-            console.log('Unable to fetch sunrise-sunset data.');
+    } catch (error) {
+        console.error('Error displaying prayer times:', error);
     }
 }
 
 // Call the main function when the page finishes loading
-window.addEventListener('load', loadSunriseSunsetData);
+window.addEventListener('load', displayISNA);
