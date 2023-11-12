@@ -28,7 +28,7 @@ Stay updated on the latest events and programs organized by our mosque. Whether 
 
 ## Get Involved
 
-Join us in making a positive impact on our community! Learn how you can contribute your time and skills to various initiatives, volunteer opportunities, and social projects. Together, we can make a difference.
+Join us in making a positive impact on our community! Learn how you can contribute your time and skills to various initiatives, volunteer opportunities, and social projects. Together, we can make a difference. Feel free to fork this repo to hel[
 
 ## Contributing
 
