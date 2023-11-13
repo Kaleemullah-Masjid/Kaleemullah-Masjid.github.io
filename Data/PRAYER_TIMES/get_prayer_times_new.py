@@ -103,7 +103,8 @@ def combine_data():
         file_name = '/home/admin/Documents/Kaleemullah-Masjid.github.io/Data/PRAYER_TIMES/PRAYER_TIMES.csv'
         existing_data = pd.read_csv(file_name)
         new_data = new_data[~new_data['Date'].isin(existing_data['Date'])]
-        combined_data = pd.concat([new_data, existing_data])
+	#Combine New & OLD Data + Sort Value by Date 
+        combined_data = pd.concat([new_data, existing_data]).sort_values('Date')
         combined_data.to_csv(file_name, index=False)
 def main():
     combine_data()
