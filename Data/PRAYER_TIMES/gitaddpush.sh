@@ -10,7 +10,7 @@ git add .
 git commit -m "$commit_message"
 
 # Push to the remote repository (assuming you're pushing to the 'origin' branch)
-git push origin master
+git push
 
 # You can change 'master' to the branch you want to push to if it's different
 
