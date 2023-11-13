@@ -100,7 +100,7 @@ def combine_data():
     new_data = get_new_data()
 
     if new_data is not None:
-        file_name = 'PRAYER_TIMES.csv'
+        file_name = '/home/admin/Documents/Kaleemullah-Masjid.github.io/Data/PRAYER_TIMES/PRAYER_TIMES.csv'
         existing_data = pd.read_csv(file_name)
         new_data = new_data[~new_data['Date'].isin(existing_data['Date'])]
         combined_data = pd.concat([new_data, existing_data])
