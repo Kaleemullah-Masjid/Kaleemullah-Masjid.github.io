@@ -2,10 +2,13 @@ import pandas as pd
 import requests
 import datetime
 import json
-from sqlalchemy import create_engine
 
 # Function to Request the API
 def request_data():
+    """
+    Requests weather data from the specified API URL.
+    Returns: JSON-formatted weather data.
+    """
     #Example Request:  https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
     apiUrl = f'https://api.weather.gov/gridpoints/LOT/71,80/forecast'
     # Perform the HTTP GET request
@@ -14,6 +17,9 @@ def request_data():
 
 # Function to parse the JSON data from the API response
 def parse_data(response_text):
+    """
+    Parses JSON-formatted weather data and returns a DataFrame.
+    """
     # Parse the JSON response and access the 'data' key
     req_data_txt = json.loads(response_text)['properties']['periods']
 
@@ -30,10 +36,6 @@ def parse_data(response_text):
     df['probabilityOfPrecipitation'] = df_temp_1
     df['dewpoint'] = df_temp_2
     df['relativeHumidity'] = df_temp_3
-    #DROP TEMP DATA
-    df_temp_1=''
-    df_temp_2=''
-    df_temp_3=''
     #Parse Date
     df['startTime'] = pd.to_datetime(df.startTime)
     df['endTime'] = pd.to_datetime(df.endTime)
@@ -43,23 +45,42 @@ def parse_data(response_text):
     df['Day'] = df['startTime'].dt.strftime('%d')
     df['Hour'] = df['startTime'].dt.strftime('%H')
     df['Date_Created'] = datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+
     return(df)
 def concat_data(df):
-    #Connect o SQLite database
-    engine = create_engine('sqlite:///Weather_Data.db')
-    #Set Table Name
-    table_name = 'Weather_Forcast'
-    # Append DataFrame to the SQLite table
-    if not df.empty:
-        df.to_sql(table_name, con=engine, if_exists='append', index=False)
-    #Commit changes if needed
-    engine.dispose()
+    """
+    Updates the existing DataFrame with new weather data.
+    Returns: Updated DataFrame.
+    """
+    #Open previous dataFrame
+    previous_df = pd.read_csv('Data.csv')
+    #Identify New Rows from current pull
+    new_df = df[~
+             (
+                 (df.name.isin(previous_df.name))
+                & (df.startTime.isin(previous_df.startTime))
+                & (df.endTime.isin(previous_df.endTime))              
+              )
+             ]
+    #Combine Old & New Data & Sort Values by Date & Hour
+    df = pd.concat([new_df,previous_df]).sort_values(['date','Hour'])
+
     return(df)
 def main():
-    req_data = request_data()
-    df_weather_forcast = parse_data(req_data)
-    df_weather_forcast = concat_data(df_weather_forcast)
-
+    """
+    Main function to request, parse, and update weather data.
+    """
+    try:
+        #Get New Data 
+        req_data = request_data()
+        #Parse Json Data
+        df_weather_forcast = parse_data(req_data)
+        #Combine Old Data with New Data
+        df_weather_forcast = concat_data(df_weather_forcast)
+        #Export to CSV
+        df_weather_forcast.to_csv('Data.csv',index=False)
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     main()
