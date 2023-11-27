@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mosque in Skokie, Illinois</title>
+    <style>
+        header {
+            background-color: #333;
+            color: #fff;
+        }
+
+        nav {
+            background-color: #444;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 16px;
+            /* Adjust the font size as needed */
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <h1>Kaleemullah Masjid</h1>
+        <p>4255 Main Street</p>
+        <p>Skokie, Illinois</p>
+    </header>
+    <nav>
+        <a href="https://kaleemullah-masjid.github.io/index.html">Home</a>
+        <a href="https://kaleemullah-masjid.github.io/About.html">About</a>
+        <a href="https://kaleemullah-masjid.github.io/Services.html">Services</a>
+        <a href="#events">Events</a>
+        <a href="#contact">Contact</a>
+        <a href="https://kaleemullah-masjid.github.io/Blog.html">Blog</a>
+    </nav>
+    <h2>Loan Calculator with Down Payment</h2>
+
+    <label for="loanAmount">Property Price ($):</label>
+    <input type="number" id="loanAmount" placeholder="Enter property price" required>
+
+    <label for="downPaymentPercentage">Down Payment Percentage (%):</label>
+    <input type="number" id="downPaymentPercentage" placeholder="Enter down payment percentage" required>
+
+    <label for="annualInterestRate">Annual Interest Rate (%):</label>
+    <input type="number" id="annualInterestRate" placeholder="Enter annual interest rate" required>
+
+    <label for="loanTerm">Loan Term (years):</label>
+    <input type="number" id="loanTerm" placeholder="Enter loan term in years" required>
+
+    <button onclick="calculateLoan()">Calculate</button>
+
+    <div id="result"></div>
+
+    <script>
+        function calculateLoan() {
+            // Get user input
+            const propertyPrice = parseFloat(document.getElementById('loanAmount').value);
+            const downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
+            const annualInterestRate = parseFloat(document.getElementById('annualInterestRate').value);
+            const loanTerm = parseFloat(document.getElementById('loanTerm').value);
+
+            // Calculate down payment amount
+            const downPaymentAmount = (downPaymentPercentage / 100) * propertyPrice;
+
+            // Calculate loan amount after down payment
+            const loanAmount = propertyPrice - downPaymentAmount;
+
+            // Calculate monthly interest rate and number of payments
+            const monthlyInterestRate = (annualInterestRate / 100) / 12;
+            const numberOfPayments = loanTerm * 12;
+
+            // Calculate monthly payment using the formula for a fixed monthly payment
+            const monthlyPayment = (loanAmount * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments));
+
+            // Display the result
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = `<h3>Loan Summary</h3>
+                                       <p>Property Price: $${propertyPrice.toFixed(2)}</p>
+                                       <p>Down Payment Percentage: ${downPaymentPercentage.toFixed(2)}%</p>
+                                       <p>Down Payment Amount: $${downPaymentAmount.toFixed(2)}</p>
+                                       <p>Loan Amount: $${loanAmount.toFixed(2)}</p>
+                                       <p>Annual Interest Rate: ${annualInterestRate.toFixed(2)}%</p>
+                                       <p>Loan Term: ${loanTerm} years</p>
+                                       <h4>Monthly Payment</h4>
+                                       <p>$${monthlyPayment.toFixed(2)}</p>`;
+        }
+    </script>
+
+</body>
+
+</html>
