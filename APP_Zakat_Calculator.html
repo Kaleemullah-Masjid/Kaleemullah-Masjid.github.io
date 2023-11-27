@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mosque in Skokie, Illinois</title>
+    <style>
+        header {
+            background-color: #333;
+            color: #fff;
+        }
+
+        nav {
+            background-color: #444;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 16px;
+            /* Adjust the font size as needed */
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Kaleemullah Masjid</h1>
+        <p>4255 Main Street</p>
+        <p>Skokie, Illinois</p>
+    </header>
+    <nav>
+        <a href="https://kaleemullah-masjid.github.io/index.html">Home</a>
+        <a href="https://kaleemullah-masjid.github.io/About.html">About</a>
+        <a href="https://kaleemullah-masjid.github.io/Services.html">Services</a>
+        <a href="#events">Events</a>
+        <a href="#contact">Contact</a>
+        <a href="https://kaleemullah-masjid.github.io/Blog.html">Blog</a>
+    </nav>
+    <h1>Zakat Calculator</h1>
+    <form id="zakatForm">
+        <label for="income">Annual Income (in your local currency):</label>
+        <input type="number" id="income" required>
+
+        <label for="expenses">Annual Expenses (excluding essentials):</label>
+        <input type="number" id="expenses" required>
+
+        <label for="gold">Value of Gold Owned (in grams):</label>
+        <input type="number" id="gold" required>
+
+        <label for="silver">Value of Silver Owned (in grams):</label>
+        <input type="number" id="silver" required>
+
+        <label for="debts">Total Outstanding Debts (if any):</label>
+        <input type="number" id="debts">
+
+        <button type="button" onclick="calculateZakat()">Calculate Zakat</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        function calculateZakat() {
+            // Get values from the form
+            const income = parseFloat(document.getElementById('income').value);
+            const expenses = parseFloat(document.getElementById('expenses').value);
+            const gold = parseFloat(document.getElementById('gold').value);
+            const silver = parseFloat(document.getElementById('silver').value);
+            const debts = parseFloat(document.getElementById('debts').value) || 0;
+
+            // Zakat calculation logic (modify according to your requirements)
+            const netIncome = income - expenses - debts;
+            const zakatAmount = (netIncome * 0.025) + (gold * 2.5 / 100) + (silver * 2.5 / 100);
+
+            // Display the result
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = `<p>Your Zakat amount is: ${zakatAmount.toFixed(2)} ${"Your Currency"}</p>`;
+        }
+    </script>
+</body>
+</html>
