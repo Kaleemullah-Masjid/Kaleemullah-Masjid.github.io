@@ -63,26 +63,29 @@
         <a href="https://kaleemullah-masjid.github.io/Blog.html">Blog</a>
     </nav>
     <h1>Zakat Calculator</h1>
-    <form id="zakatForm">
-        <label for="income">Annual Income (in your local currency):</label>
-        <input type="number" id="income" required>
-
-        <label for="expenses">Annual Expenses (excluding essentials):</label>
-        <input type="number" id="expenses" required>
-
-        <label for="gold">Value of Gold Owned (in grams):</label>
-        <input type="number" id="gold" required>
-
-        <label for="silver">Value of Silver Owned (in grams):</label>
-        <input type="number" id="silver" required>
-
-        <label for="debts">Total Outstanding Debts (if any):</label>
-        <input type="number" id="debts">
-
-        <button type="button" onclick="calculateZakat()">Calculate Zakat</button>
-    </form>
-
-    <div id="result"></div>
+    <div class="container" data-component="collapsibles">
+            
+        <form id="zakatForm">
+            <label for="income">Annual Income (in your local currency):</label>
+            <input type="number" id="income" required>
+    
+            <label for="expenses">Annual Expenses (excluding essentials):</label>
+            <input type="number" id="expenses" required>
+    
+            <label for="gold">Value of Gold Owned (in grams):</label>
+            <input type="number" id="gold" required>
+    
+            <label for="silver">Value of Silver Owned (in grams):</label>
+            <input type="number" id="silver" required>
+    
+            <label for="debts">Total Outstanding Debts (if any):</label>
+            <input type="number" id="debts">
+    
+            <button type="button" onclick="calculateZakat()">Calculate Zakat</button>
+        </form>
+    
+        <div id="result"></div>
+    </div>
 
     <script>
         function calculateZakat() {
