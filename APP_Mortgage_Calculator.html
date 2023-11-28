@@ -78,22 +78,23 @@
         <a href="https://kaleemullah-masjid.github.io/Blog.html">Blog</a>
     </nav>
     <h2>Loan Calculator with Down Payment</h2>
-
-    <label for="loanAmount">Property Price ($):</label>
-    <input type="number" id="loanAmount" placeholder="Enter property price" required>
-
-    <label for="downPaymentPercentage">Down Payment Percentage (%):</label>
-    <input type="number" id="downPaymentPercentage" placeholder="Enter down payment percentage" required>
-
-    <label for="annualInterestRate">Annual Interest Rate (%):</label>
-    <input type="number" id="annualInterestRate" placeholder="Enter annual interest rate" required>
-
-    <label for="loanTerm">Loan Term (years):</label>
-    <input type="number" id="loanTerm" placeholder="Enter loan term in years" required>
-
-    <button onclick="calculateLoan()">Calculate</button>
-
-    <div id="result"></div>
+    <div class="container" data-component="collapsibles">
+        <label for="loanAmount">Property Price ($):</label>
+        <input type="number" id="loanAmount" placeholder="Enter property price" required>
+    
+        <label for="downPaymentPercentage">Down Payment Percentage (%):</label>
+        <input type="number" id="downPaymentPercentage" placeholder="Enter down payment percentage" required>
+    
+        <label for="annualInterestRate">Annual Interest Rate (%):</label>
+        <input type="number" id="annualInterestRate" placeholder="Enter annual interest rate" required>
+    
+        <label for="loanTerm">Loan Term (years):</label>
+        <input type="number" id="loanTerm" placeholder="Enter loan term in years" required>
+    
+        <button onclick="calculateLoan()">Calculate</button>
+    
+        <div id="result"></div>
+    </div>
 
     <script>
         function calculateLoan() {
