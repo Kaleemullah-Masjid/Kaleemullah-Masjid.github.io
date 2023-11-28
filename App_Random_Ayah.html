@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mosque in Skokie, Illinois</title>
+    <style>
+        header {
+            background-color: #333;
+            color: #fff;
+        }
+
+        nav {
+            background-color: #444;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 16px;
+            /* Adjust the font size as needed */
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <h1>Kaleemullah Masjid</h1>
+        <p>4255 Main Street</p>
+        <p>Skokie, Illinois</p>
+    </header>
+    <nav>
+        <a href="https://kaleemullah-masjid.github.io/index.html">Home</a>
+        <a href="https://kaleemullah-masjid.github.io/About.html">About</a>
+        <a href="https://kaleemullah-masjid.github.io/Services.html">Services</a>
+        <a href="#events">Events</a>
+        <a href="#contact">Contact</a>
+        <a href="https://kaleemullah-masjid.github.io/Blog.html">Blog</a>
+    </nav>
+    <div class="container" data-component="collapsibles">
+
+        <h1>Random Quranic Ayah</h1>
+        <div id="verse-container"></div>
+        <button id="randomVerseButton">Get Random Verse</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('randomVerseButton').addEventListener('click', getRandomVerse);
+        async function getRandomVerse() {
+            // Function to get Random Ayah from the Quran
+            const apiUrl = `https://api.alquran.cloud/v1/ayah/${getRandomAyah()}?translations=131`;
+
+            try {
+
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (response.ok) {
+                    let quran_data = data.data
+                    console.log(data.data)
+
+                    let quran_juz = quran_data.juz
+                    let quran_surah_number = quran_data.surah.number
+                    let quran_surah_name = quran_data.surah.englishName
+
+                    let quran_page = quran_data.page
+                    let quran_ruku = quran_data.ruku
+
+                    let quran_verse_text = quran_data.text
+                    let quran_verse_number = quran_data.number
+                    console.log(`JUZ: ${quran_juz}`)
+
+                    // Display the result
+                    const resultElement = document.getElementById('result');
+                    resultElement.innerHTML = `<p>
+                        Juz Number: ${quran_juz}<br>
+                        Surah Number: ${quran_surah_number}<br>
+                        Surah Name: ${quran_surah_name}<br>
+                        Page Number: ${quran_page}<br>
+                        Ruku Number: ${quran_ruku}<br>
+                        Verse Number: ${quran_verse_number}<br>
+
+                        Ayah: ${quran_verse_text}<br>
+                        
+                    
+                        </p>`;
+                    
+                    //const resultElement = document.getElementById('result');
+                    //resultElement.innerHTML = `<p>Your Zakat amount is: ${zakatAmount.toFixed(2)} ${"Your Currency"}</p>`;
+                }
+                else {
+                    throw new Error('Failed to fetch Data');
+                }
+
+            }
+            catch (error) {
+                console.error('Error fetching data; Error is:\n:', error);
+                return null;
+            }
+        }
+
+        function getRandomAyah() {
+            // Generate a random verse number between 1 and 6236 (total number of verses in the Quran)
+            let total_verses = Math.floor(Math.random() * 6236) + 1;
+            return total_verses;
+        }
+    </script>
+</body>
+
+</html>
