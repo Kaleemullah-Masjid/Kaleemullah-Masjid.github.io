@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,6 +31,7 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -63,11 +65,14 @@
 </head>
 
 <body>
+    <!-- Header section -->
     <header>
         <h1>Kaleemullah Masjid</h1>
         <p>4255 Main Street</p>
         <p>Skokie, Illinois</p>
     </header>
+
+    <!-- Navigation section -->
     <nav>
         <a href="https://kaleemullah-masjid.github.io/index.html">Home</a>
         <a href="https://kaleemullah-masjid.github.io/About.html">About</a>
@@ -76,26 +81,65 @@
         <a href="#contact">Contact</a>
         <a href="https://kaleemullah-masjid.github.io/Blog.html">Blog</a>
     </nav>
-    <div class="container" data-component="collapsibles">
 
+    <!-- Main container with collapsibles -->
+    <div class="container" data-component="collapsibles">
         <h1>Random Quranic Ayah</h1>
+
+        <!-- Container for displaying Quranic Ayah -->
         <div id="verse-container"></div>
+
+        <!-- Button to get a random verse -->
         <button id="randomVerseButton">Get Random Verse</button>
+
+        <!-- Container for displaying results -->
         <div id="result"></div>
     </div>
 
+    <!-- Inline JavaScript -->
     <script>
+        // Event listener for the "Get Random Verse" button
         document.getElementById('randomVerseButton').addEventListener('click', getRandomVerse);
-        async function getRandomVerse() {
-            // Function to get Random Ayah from the Quran
-            const apiUrl = `https://api.alquran.cloud/v1/ayah/${getRandomAyah()}?translations=131`;
+        async function get_english_translation(ayah_number) {
+            // Function to fetch English translation for a given Ayah number
+            const json_url = 'https://raw.githubusercontent.com/Kaleemullah-Masjid/Kaleemullah-Masjid.github.io/main/Data/Qurah_Ayah_Translation/en-all-translations-tanzil.json'
 
             try {
+                // Fetch JSON data
+                const response = await fetch(json_url);
+                const data = await response.json();
 
+                if (response.ok) {
+                    // Extract English translation data for the given Ayah number
+                    const en_ayah_data = data[ayah_number]
+                    return (en_ayah_data)
+                }
+                else {
+                    throw new Error('Failed to fetch Data');
+                }
+            }
+            catch (error) {
+                console.error('Error fetching English Translation Data; Error is:\n:', error);
+                return null;
+
+            }
+        }
+
+        async function getRandomVerse() {
+            // Function to get Random Ayah from the Quran
+            const random_ayah_number = getRandomAyah()
+            // Fetch English translation data
+            const en_ayah_data = await get_english_translation(random_ayah_number)
+
+            console.log(en_ayah_data)
+            try {
+                // Fetch Quranic data using the Quran API
+                const apiUrl = `https://api.alquran.cloud/v1/ayah/${random_ayah_number}?translations=131`;
                 const response = await fetch(apiUrl);
                 const data = await response.json();
 
                 if (response.ok) {
+                    // Extract relevant data from the Quran API response
                     let quran_data = data.data
                     console.log(data.data)
 
@@ -120,13 +164,15 @@
                         Ruku Number: ${quran_ruku}<br>
                         Verse Number: ${quran_verse_number}<br>
 
-                        Ayah: ${quran_verse_text}<br>
+                        Ayah: ${quran_verse_text}<br><br><br>
+
+                        English Translations:<br>
                         
-                    
                         </p>`;
-                    
-                    //const resultElement = document.getElementById('result');
-                    //resultElement.innerHTML = `<p>Your Zakat amount is: ${zakatAmount.toFixed(2)} ${"Your Currency"}</p>`;
+                    // Display English translations
+                    for (const translation in en_ayah_data) {
+                        resultElement.innerHTML += `${en_ayah_data[translation]}<br>(${translation})<br><br>`
+                    }
                 }
                 else {
                     throw new Error('Failed to fetch Data');
@@ -140,6 +186,7 @@
         }
 
         function getRandomAyah() {
+            // Function to generate a random Ayah number
             // Generate a random verse number between 1 and 6236 (total number of verses in the Quran)
             let total_verses = Math.floor(Math.random() * 6236) + 1;
             return total_verses;
