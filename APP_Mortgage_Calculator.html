@@ -114,6 +114,10 @@
             const monthlyInterestRate = (annualInterestRate / 100) / 12;
             const numberOfPayments = loanTerm * 12;
 
+            // Calculate total interest
+            //Total Interest=(Loan Amount×Interest Rate×Loan Term)−Loan Amount
+            const totalInterest = (loanAmount * monthlyInterestRate * numberOfPayments) - loanAmount
+
             // Calculate monthly payment using the formula for a fixed monthly payment
             const monthlyPayment = (loanAmount * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments));
 
@@ -127,8 +131,20 @@
                                        <p>Annual Interest Rate: ${annualInterestRate.toFixed(2)}%</p>
                                        <p>Loan Term in years: ${loanTerm} years</p>
                                        <p>Loan Term in months: ${numberOfPayments} months</p>
-                                       <h4>Monthly Payment</h4>
-                                       <p>$${monthlyPayment.toFixed(2)}</p>`;
+                                       <h4>Monthly Payment:</h4>
+                                       <p>$${monthlyPayment.toFixed(2)}</p>
+                                       <h4>Total Interest Paid:</h4>
+                                       <p>$${totalInterest.toFixed(2)}</p>
+                                       
+                                       
+                                       
+                                       
+                                       `
+
+                
+                
+                
+                ;
         }
     </script>
 
