@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Cloud</title>
+    <style>
+        #wordcloud {
+            position: relative;
+            width: 400px;
+            height: 200px;
+            
+        }
+
+        .word {
+            position: absolute;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div id="wordcloud"></div>
+    <script>
+
+        const words = [
+            { text: 'example', weight: 15 },
+            { text: 'word', weight: 10 },
+            { text: 'cloud', weight: 8 },
+            // Add more words with weights as needed
+        ];
+
+        const wordCloudContainer = document.getElementById('wordcloud');
+
+        function checkCollision(wordElement, otherWords) {
+            for (const otherWord of otherWords) {
+                if (
+                    wordElement !== otherWord &&
+                    wordElement.offsetLeft < otherWord.offsetLeft + otherWord.offsetWidth &&
+                    wordElement.offsetLeft + wordElement.offsetWidth > otherWord.offsetLeft &&
+                    wordElement.offsetTop < otherWord.offsetTop + otherWord.offsetHeight &&
+                    wordElement.offsetTop + wordElement.offsetHeight > otherWord.offsetTop
+                ) {
+                    return true; // Collision detected
+                }
+            }
+            return false; // No collision
+        }
+
+        words.forEach(wordObj => {
+            const wordElement = document.createElement('div');
+            wordElement.textContent = wordObj.text;
+            wordElement.style.fontSize = `${wordObj.weight}px` * 5;
+
+            let collision;
+            let attempt = 0;
+            let maxAttempts = 20;
+
+            do {
+                // Randomly position the word within the container
+                const x = Math.random() * (wordCloudContainer.offsetWidth + 100 - wordElement.offsetWidth);
+                const y = Math.random() * (wordCloudContainer.offsetHeight + 100 - wordElement.offsetHeight);
+
+                wordElement.style.left = `${x}px`;
+                wordElement.style.top = `${y}px`;
+
+                // Check for collisions with other words
+                collision = checkCollision(wordElement, wordCloudContainer.querySelectorAll('.word'));
+
+                attempt++;
+
+                if (attempt >= maxAttempts) {
+                    // To prevent infinite loop in case of too many collisions
+                    break;
+                }
+
+            } while (collision);
+
+            wordElement.classList.add('word');
+            wordCloudContainer.appendChild(wordElement);
+        });
+
+
+    </script>
+</body>
+
+</html>
