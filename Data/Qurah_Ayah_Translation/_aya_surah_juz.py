@@ -96,4 +96,35 @@ ayah_juz_surah = pd.merge(df_surah_juz_,df_ayah_juz_,on = 'Ayah_Number')
 df_new = pd.merge(df,ayah_juz_surah, on='Ayah_Number')
 
 #Save the result to a CSV file
-df_new.to_csv('Ayah_Surah_Juz.csv',index=None)
+df_new.to_csv('En-all-Ayah.csv',index=None)
+df_new.set_index('Ayah_Number').to_json(f'En-all-Ayah.json', orient='index')
+
+
+en_tanzil_list = ['en-ahmedali-tanzil', 'en-ahmedraza-tanzil','en-arberry-tanzil', 'en-daryabadi-tanzil', 'en-hilali-tanzil',
+       'en-itani-tanzil', 'en-maududi-tanzil', 'en-mubarakpuri-tanzil','en-pickthall-tanzil', 'en-qarai-tanzil', 'en-qaribullah-tanzil',
+       'en-rwwad-quranenc', 'en-saheeh-quranenc', 'en-sahih-tanzil','en-sarwar-tanzil', 'en-shakir-tanzil', 'en-wahiduddin-tanzil','en-yusufali-tanzil']
+Juz_Number_list = df_new['Juz_Number'].unique().tolist()
+Surah_Number_list = df_new['Surah_Number'].unique().tolist()
+
+juz_number_dict = {}
+for juz_number in Juz_Number_list:
+    juz_number_dict[juz_number] = {}
+    for tanzil in en_tanzil_list:
+        juz_text = " ".join(df_new[df_new['Juz_Number'] == juz_number][tanzil].tolist())
+        juz_number_dict[juz_number][tanzil] = juz_text
+
+surah_number_dict = {}
+for surah_number in Surah_Number_list:
+    surah_number_dict[surah_number] = {}
+    for tanzil in en_tanzil_list:
+        surah_text = " ".join(df_new[df_new['Surah_Number'] == surah_number][tanzil].tolist())
+        surah_number_dict[surah_number][tanzil] = surah_text
+
+df_juz = pd.DataFrame.from_dict(juz_number_dict).transpose().reset_index().rename(columns={'index':'Juz_Number'})
+df_surah = pd.DataFrame.from_dict(surah_number_dict).transpose().reset_index().rename(columns={'index':'Surah_Number'})
+
+df_juz.to_csv('En-all-Juz.csv',index=None)
+df_juz.set_index('Juz_Number').to_json(f'En-all-Juz.json', orient='index')
+
+df_surah.to_csv('En-all-Surah.csv',index=None)
+df_surah.set_index('Surah_Number').to_json(f'En-all-Surah.json', orient='index')
