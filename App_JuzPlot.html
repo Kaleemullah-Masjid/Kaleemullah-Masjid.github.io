@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mosque in Skokie, Illinois</title>
+    <style>
+        header {
+            background-color: #333;
+            color: #fff;
+        }
+
+        nav {
+            background-color: #444;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 16px;
+            /* Adjust the font size as needed */
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+
+        canvas {
+            border: 1px solid #000;
+            cursor: crosshair;
+        }
+
+        #tools {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Kaleemullah Masjid</h1>
+        <p>4255 Main Street</p>
+        <p>Skokie, Illinois</p>
+    </header>
+    <nav>
+        <a href="https://kaleemullah-masjid.github.io/index.html">Home</a>
+        <a href="https://kaleemullah-masjid.github.io/About.html">About</a>
+        <a href="https://kaleemullah-masjid.github.io/Services.html">Services</a>
+        <a href="#events">Events</a>
+        <a href="#contact">Contact</a>
+        <a href="https://kaleemullah-masjid.github.io/Blog.html">Blog</a>
+    </nav>
+    <p></p>
+    <p></p>
+    <canvas id="myCanvas" width="800" height="400"></canvas>
+    <div id="tools">
+        <button onclick="juz_wordcloud()">Plot Random Juz</button>
+        <button onclick="clearCanvas()">Clear Canvas</button>
+
+        <p id="Juz_Number"></p>
+        <p id="Juz_Author"></p>
+        <p id="Juz_Length"></p>
+        <p id="wordCountResult"></p>
+    </div>
+    <script src="src/word_cloud.js"></script>
+</body>
+
+</html>
