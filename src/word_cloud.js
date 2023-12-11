@@ -129,9 +129,9 @@ async function addText(word_freq_dict) {
     const word_freq = word_freq_dict
 
     // Display words on the canvas
-    var x = 10;
-    var y = 30;
-    var lineHeight = 40;
+    let x = 10;
+    let y = 30;
+    const lineHeight = 40;
 
     ctx.fillStyle = 'green';
 
