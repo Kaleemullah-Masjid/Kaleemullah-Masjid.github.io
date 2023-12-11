@@ -136,7 +136,7 @@ async function addText(word_freq_dict) {
     const word_freq = word_freq_dict
 
     // Display words on the canvas
-    let x = 10;
+    let x = 50;
     let y = 30;
     const lineHeight = 40;
 
