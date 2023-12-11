@@ -2,7 +2,14 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
-let color = "#000000"; // Default color
+// Default color
+let color = "#000000"; 
+
+// Set initial canvas dimensions
+canvas.width = window.innerWidth * 0.8; // Adjust as needed
+canvas.height = window.innerHeight * 0.6; // Adjust as needed
+
+
 // Function to fetch CSV data from a GitHub URL
 async function getRandomJuz() {
     // Function to generate a random Ayah number
