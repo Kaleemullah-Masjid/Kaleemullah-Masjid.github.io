@@ -49,7 +49,7 @@ async function fetchRandomJuzData(){
     const random_juz_data = await fetchJuzData(random_juz_number);
     //Get all Keys in Random_Juz_Data
     const author_list = Object.keys(random_juz_data);
-    console.log(author_list)
+
     //Get Length of List
     const author_length = author_list.length;
     //Get Random Author
@@ -66,14 +66,14 @@ async function fetchRandomJuzData(){
 }
 //Tokenize Words and Filter Out words
 async function clean_words(string_chars) {
-    const inputSentence = string_chars;
+    const inputSentence = string_chars[0];
 
     // Remove non-alphabetic characters , convert to lowercase, and remove leading and trailing whitespaces
     const cleanedText = inputSentence.replace(/[^a-zA-Z\s]/g, '').toLowerCase().trim();
 
 
     // Split the sentence into words using space as a delimiter
-    const words = cleanedText.split(/\s+/);
+    const words = inputSentence.split(/\s+/);
 
     // List of common stop words
     let stopWords = [
@@ -110,8 +110,11 @@ async function count_words(word_list) {
             word_freq[word] = 1
         }
     }
-
-
+    // Unique Word Count
+    u_word_count = Object.keys(word_freq).length
+    
+    //Set Unqiue Word Count
+    document.getElementById("uniqueWordCountResult").innerText = "Unique Word count: " + u_word_count;
     //Return Word Freq
     return (word_freq)
 
@@ -127,7 +130,6 @@ async function juz_word_frequency(){
     //Get Word Frequncy
     const word_frequency_frequency = await count_words(clean_words_frequency)
 
-    console.log(word_frequency_frequency)
     return(word_frequency_frequency)
 }
 //Function to Count Words of Random Juz
