@@ -20,7 +20,7 @@ async function getRandomJuz() {
 async function fetchJuzData(random_juz) {
     // Replace with your GitHub URL
 
-    const json_url = 'https://raw.githubusercontent.com/Kaleemullah-Masjid/Kaleemullah-Masjid.github.io/main/Data/Qurah_Ayah_Translation/En-all-Juz.json';
+    const json_url = 'https://raw.githubusercontent.com/Kaleemullah-Masjid/Kaleemullah-Masjid.github.io/main/Data/Qurah_Ayah_Translation/En-all-Juz-clean.json';
 
     try {
         // Fetch JSON data
