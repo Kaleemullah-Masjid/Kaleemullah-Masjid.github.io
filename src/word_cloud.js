@@ -59,7 +59,7 @@ async function fetchRandomJuzData(){
     //Display Juz Info
     document.getElementById("Juz_Number").innerText = "Juz Number: " + random_juz_number;
     document.getElementById("Juz_Author").innerText = "English Translator: " + random_author;
-    document.getElementById("Juz_Length").innerText = "Length of Juz is: " + random_juz_author_data.length;
+    document.getElementById("Juz_Length").innerText = "Length of Juz is: " + random_juz_author_data[0].length;
     
     //Return Random Juz Data
     return(random_juz_author_data)
