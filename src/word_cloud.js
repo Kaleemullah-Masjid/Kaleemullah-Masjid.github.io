@@ -9,7 +9,6 @@ let color = "#000000";
 canvas.width = window.innerWidth * 0.8; // Adjust as needed
 canvas.height = window.innerHeight * 0.6; // Adjust as needed
 
-
 // Function to fetch CSV data from a GitHub URL
 async function getRandomJuz() {
     // Function to generate a random Ayah number
@@ -17,6 +16,7 @@ async function getRandomJuz() {
     const total_juz = Math.floor(Math.random() * 30) + 1;
     return total_juz;
 }
+// Function to get Juz Data from RAW github source
 async function fetchJuzData(random_juz) {
     // Replace with your GitHub URL
 
@@ -42,29 +42,30 @@ async function fetchJuzData(random_juz) {
 
     }
 }
+// Choose Random Juz from source
 async function fetchRandomJuzData(){
-    //Get Random Juz Number
+    // Get Random Juz Number
     const random_juz_number = await getRandomJuz();
-    //Pull Random Juz
+    // Pull Random Juz
     const random_juz_data = await fetchJuzData(random_juz_number);
-    //Get all Keys in Random_Juz_Data
+    // Get all Keys in Random_Juz_Data
     const author_list = Object.keys(random_juz_data);
 
-    //Get Length of List
+    // Get Length of List
     const author_length = author_list.length;
-    //Get Random Author
+    // Get Random Author
     const random_author =  author_list[Math.floor(Math.random() * author_length) + 1];
-    //Get Juz From Random Author
+    // Get Juz From Random Author
     const random_juz_author_data = random_juz_data[random_author]
-    //Display Juz Info
+    // Display Juz Info
     document.getElementById("Juz_Number").innerText = "Juz Number: " + random_juz_number;
     document.getElementById("Juz_Author").innerText = "English Translator: " + random_author;
-    document.getElementById("Juz_Length").innerText = "Length of Juz is: " + random_juz_author_data[0].length;
+
     
-    //Return Random Juz Data
+    // Return Random Juz Data
     return(random_juz_author_data)
 }
-//Tokenize Words and Filter Out words
+// Tokenize Words and Filter Out words
 async function clean_words(string_chars) {
     const inputSentence = string_chars[0];
 
@@ -91,21 +92,21 @@ async function clean_words(string_chars) {
 
     return(filteredWords)
 }
-//Function to Count Words in Given Input
+// Function to Count Words in Given Input
 async function count_words(word_list) {
 
     const filteredWords = word_list
-    //Word Freq Dict
+    // Word Freq Dict
     const word_freq = {}
 
-    //For Each word add count
+    // For Each word add count
     for (let i = 0; i < filteredWords.length; i++) {
         const word = filteredWords[i]
-        //If word in Dictionary, add 1 to word
+        // If word in Dictionary, add 1 to word
         if (word_freq[word]) {
             word_freq[word] += 1
         }
-        //Else Add word to Dict & set 1
+        // Else Add word to Dict & set 1
         else {
             word_freq[word] = 1
         }
@@ -113,28 +114,28 @@ async function count_words(word_list) {
     // Unique Word Count
     u_word_count = Object.keys(word_freq).length
     
-    //Set Unqiue Word Count
+    // Set Unqiue Word Count
     document.getElementById("uniqueWordCountResult").innerText = "Unique Word count: " + u_word_count;
-    //Return Word Freq
+    // Return Word Freq
     return (word_freq)
 
 }
-//Function to get word Frequency
+// Function to get word Frequency
 async function juz_word_frequency(){
-    //Get Random Juz from Random English Author
+    // Get Random Juz from Random English Author
     const random_juz_frequency = await fetchRandomJuzData()
 
-    //Get Random Juz from Random English Author
+    // Get Random Juz from Random English Author
     const clean_words_frequency = await clean_words(random_juz_frequency)
 
-    //Get Word Frequncy
+    // Get Word Frequncy
     const word_frequency_frequency = await count_words(clean_words_frequency)
 
     return(word_frequency_frequency)
 }
-//Function to Count Words of Random Juz
+// Function to Count Words of Random Juz
 async function addText(word_freq_dict) {
-    //Get Word Freq
+    // Get Word Freq
     const word_freq = word_freq_dict
 
     // Display words on the canvas
@@ -180,13 +181,13 @@ async function addText(word_freq_dict) {
         x += ctx.measureText(key).width + 10; 
     }
 }
-
-async function juz_wordcloud(){
-    const word_frequency = await juz_word_frequency()
-    await addText(word_frequency)
-}
-
-
-function clearCanvas() {
+// Function To Clear Canvas
+async function clearCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+// Function Clear Canvas and Add Random Juz Word Cloud
+async function juz_wordcloud(){
+    const word_frequency = await juz_word_frequency();
+    await clearCanvas();
+    await addText(word_frequency);
 }
