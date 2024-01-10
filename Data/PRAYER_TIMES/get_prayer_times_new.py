@@ -3,6 +3,9 @@ import requests
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import json
+import os
+
+dir_path = os.path.dirname(os.path.abspath(__file__))
 
 # Function to Request the API
 def request_data_input(year,month):
@@ -98,13 +101,17 @@ def get_new_data():
 def combine_data():
     #Function to GET NEXT MONTH & FOLLOWING MONTH DATA
     new_data = get_new_data()
-
+    print(dir_path)
     if new_data is not None:
-        file_name = '/home/admin/Documents/Kaleemullah-Masjid.github.io/Data/PRAYER_TIMES/PRAYER_TIMES.csv'
+        file_name = f'{dir_path}/PRAYER_TIMES.csv'
         existing_data = pd.read_csv(file_name)
         new_data = new_data[~new_data['Date'].isin(existing_data['Date'])]
-	#Combine New & OLD Data + Sort Value by Date 
-        combined_data = pd.concat([new_data, existing_data]).sort_values('Date')
+	    
+        #Combine New & OLD Data + Sort Value by Date 
+        combined_data = pd.concat([new_data, existing_data])
+        combined_data['Date_New'] = combined_data['Date'].astype('datetime64[s]')
+        combined_data = combined_data.sort_values('Date_New', ascending=False)
+        print(combined_data.columns)
         combined_data.to_csv(file_name, index=False)
 def main():
     combine_data()
