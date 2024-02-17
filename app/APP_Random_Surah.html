@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mosque in Skokie, Illinois</title>
+    <style>
+        header {
+            background-color: #333;
+            color: #fff;
+        }
+
+        nav {
+            background-color: #444;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 16px;
+            /* Adjust the font size as needed */
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #wordCloud {
+            width: 400px;
+            height: 400px;
+            border: 1px solid #ccc;
+            position: relative;
+        }
+
+        .word {
+            position: absolute;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- Header section -->
+    <header>
+        <h1>Kaleemullah Masjid</h1>
+        <p>4255 Main Street</p>
+        <p>Skokie, Illinois</p>
+    </header>
+
+    <!-- Navigation section -->
+    <nav>
+        <a href="https://kaleemullah-masjid.github.io/index.html">Home</a>
+        <a href="https://kaleemullah-masjid.github.io/About.html">About</a>
+        <a href="https://kaleemullah-masjid.github.io/Services.html">Services</a>
+        <a href="#events">Events</a>
+        <a href="#contact">Contact</a>
+        <a href="https://kaleemullah-masjid.github.io/Blog.html">Blog</a>
+    </nav>
+
+    <!-- Main container with collapsibles -->
+    <div class="container" data-component="collapsibles">
+        <h1>Random Quranic Ayah</h1>
+
+        <!-- Container for displaying Quranic Ayah -->
+        <div id="verse-container"></div>
+        <select id="Juz_Number" name="Juz_Number">
+            <option value=1>1</option>
+            <option value=2>2</option>
+            <option value=3>3</option>
+            <option value=4>4</option>
+            <option value=5>5</option>
+            <option value=6>6</option>
+            <option value=7>7</option>
+            <option value=8>8</option>
+            <option value=9>9</option>
+            <option value=10>10</option>
+            <option value=11>11</option>
+            <option value=12>12</option>
+            <option value=13>13</option>
+            <option value=14>14</option>
+            <option value=15>15</option>
+            <option value=16>16</option>
+            <option value=17>17</option>
+            <option value=18>18</option>
+            <option value=19>19</option>
+            <option value=20>20</option>
+            <option value=21>21</option>
+            <option value=22>22</option>
+            <option value=23>23</option>
+            <option value=24>24</option>
+            <option value=25>25</option>
+            <option value=26>26</option>
+            <option value=27>27</option>
+            <option value=28>28</option>
+            <option value=29>29</option>
+            <option value=30>30</option>
+            
+            <!-- Add more options as needed -->
+        </select>
+        <label for="Juz">Select your Juz Number:</label>
+
+        
+
+        <!-- Button to get a random verse -->
+        <button id="randomVerseButton">Get Random Verse</button>
+
+        <!-- Container for displaying results -->
+
+        <body>
+            <canvas id="wordCloudCanvas" width="400" height="400"></canvas>
+        </body>
+
+    </div>
+
+    <!-- Inline JavaScript -->
+    <script>
+        // Event listener for the "Get Random Verse" button
+        document.getElementById('randomVerseButton').addEventListener('click', getRandomVerse);
+        async function get_english_translation(ayah_number) {
+            // Function to fetch English translation for a given Ayah number
+            const json_url = 'https://raw.githubusercontent.com/Kaleemullah-Masjid/Kaleemullah-Masjid.github.io/main/Data/Qurah_Ayah_Translation/En-all-Surah.json'
+
+            try {
+                // Fetch JSON data
+                const response = await fetch(json_url);
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Extract English translation data for the given Ayah number
+                    const en_ayah_data = data[ayah_number]
+                    return (en_ayah_data)
+                }
+                else {
+                    throw new Error('Failed to fetch Data');
+                }
+            }
+            catch (error) {
+                console.error('Error fetching English Translation Data; Error is:\n:', error);
+                return null;
+
+            }
+        }
+
+        async function word_freq(text) {
+            // Convert text to lowercase and remove punctuation
+            text = text.toLowerCase().replace(/[^\w\s]/g, '');
+
+            // Split the text into words
+            var words = text.split(/\s+/);
+
+            // Remove common stopwords
+            var stopwords = new Set(['this', 'is', 'a', 'for', 'you', 'can', 'with', 'your', 'own', 'are', 'of', 'in', 'given']);
+            words = words.filter(function (word) {
+                return !stopwords.has(word);
+            });
+
+            // Calculate total word count
+            var totalWords = words.length;
+
+            // Count word frequency
+            var wordFreq = {};
+            words.forEach(function (word) {
+                wordFreq[word] = (wordFreq[word] || 0) + 1;
+            });
+
+            // Weighted words
+            var weightedWords = [];
+            words.forEach(function (word) {
+                let word_weight = ((((weightedWords[word] || 0) + 1) / totalWords).toFixed(5));
+                weightedWords.push({ text: word, weight: word_weight });
+            });
+
+            return (wordFreq)
+
+        }
+        async function checkCollision(wordElement, otherWords) {
+            for (const otherWord of otherWords) {
+                if (
+                    wordElement !== otherWord &&
+                    wordElement.offsetLeft < otherWord.offsetLeft + otherWord.offsetWidth &&
+                    wordElement.offsetLeft + wordElement.offsetWidth > otherWord.offsetLeft &&
+                    wordElement.offsetTop < otherWord.offsetTop + otherWord.offsetHeight &&
+                    wordElement.offsetTop + wordElement.offsetHeight > otherWord.offsetTop
+                ) {
+                    return true; // Collision detected
+                }
+            }
+            return false; // No collision
+        }
+
+        async function getRandomVerse() {
+            // Function to get Random Ayah from the Quran
+            const random_ayah_number = getRandomAyah()
+            // Fetch English translation data
+            const en_ayah_data = await get_english_translation(random_ayah_number)
+
+            const weight_words = await word_freq(en_ayah_data['en-ahmedali-tanzil'])
+            console.log(weight_words)
+            var canvas = document.getElementById('wordCloudCanvas');;
+            var ctx = canvas.getContext('2d');
+
+            // Set background color
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            weight_words.forEach(function (weightedWord) {
+
+                // Calculate font size based on the weighted word
+                var fontSize = weightedWord.weight;
+
+                // Set font style
+                ctx.font = fontSize + 'px Arial';
+
+                // Calculate frequency as a ratio
+                var frequency = weightedWord.weight * 100;
+
+                // Set fill color based on the frequency
+                var color = 'rgba(0, 0, 0, ' + frequency + ')';
+                ctx.fillStyle = color;
+
+                // Draw the word on the canvas
+                ctx.fillText(weightedWord.text, Math.random() * canvas.width, Math.random() * canvas.height);
+            });
+
+        }
+
+        function getRandomAyah() {
+            // Function to generate a random Ayah number
+            // Generate a random verse number between 1 and 114 (total number of surahs in the Quran)
+            let total_verses = Math.floor(Math.random() * 114) + 1;
+            return total_verses;
+        }
+    </script>
+</body>
+
+</html>
