@@ -22,6 +22,7 @@ def main():
         os.chdir(parent_directory)
 
         # Run Git commands
+        subprocess.run(["git", "pull"])
         # Add the file
         subprocess.run(["git", "add", '.'])
 
