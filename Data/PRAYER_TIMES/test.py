@@ -11,7 +11,7 @@ def main():
         cur_date = datetime.date.today()
 
         # RUN PY SCRIPT
-        #subprocess.run(["py", ".\get_prayer_times_new.py"])
+        subprocess.run(["py", ".\get_prayer_times_new.py"])
 
         # Change the current working directory to the parent directory
         # Get the current working directory
