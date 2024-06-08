@@ -97,6 +97,7 @@ def get_new_data():
     #temp_data_2  = parse_request(temp_data_2)
 
     temp_data = pd.concat([temp_data_1,temp_data_2])
+    temp_data = pd.concat([temp_data_1])
     return(temp_data)
 def combine_data():
     #Function to GET NEXT MONTH & FOLLOWING MONTH DATA
