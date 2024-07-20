@@ -82,22 +82,21 @@ def parse_request(response):
     else:
         print(f"Request failed with status code {response.status_code}")
 def get_new_data():
-    month_next_1 = datetime.today() + relativedelta(months=+0)
-    #month_next_2 = datetime.today() + relativedelta(months=+2)
+    month_next_1 = datetime.today() + relativedelta(months=+1)
+    month_next_2 = datetime.today() + relativedelta(months=+2)
     month_next_1_year = month_next_1.year
     month_next_1_month = month_next_1.month
 
-    #month_next_2_year = month_next_2.year
-    #month_next_2_month = month_next_2.month
+    month_next_2_year = month_next_2.year
+    month_next_2_month = month_next_2.month
 
     temp_data_1 = request_data_input(month_next_1_year,month_next_1_month)
     temp_data_1  = parse_request(temp_data_1)
 
-    #temp_data_2 = request_data_input(month_next_2_year,month_next_2_month)
-    #temp_data_2  = parse_request(temp_data_2)
+    temp_data_2 = request_data_input(month_next_2_year,month_next_2_month)
+    temp_data_2  = parse_request(temp_data_2)
 
-    #temp_data = pd.concat([temp_data_1,temp_data_2])
-    temp_data = pd.concat([temp_data_1])
+    temp_data = pd.concat([temp_data_1,temp_data_2])
     return(temp_data)
 def combine_data():
     #Function to GET NEXT MONTH & FOLLOWING MONTH DATA
