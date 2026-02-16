@@ -130,11 +130,32 @@ async function displaySunriseSunsetTimes() {
     sunsetTimeCell.textContent = sunsetTime;   
 }
 
+async function getLastSundayOfMonth() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1; // Months are 0-based, so add 1
+    const lastDayOfMonth = new Date(year, month, 0); // Get the last day of the current month
+    const dayOfWeek = lastDayOfMonth.getDay(); // Get the day of the week (0 = Sunday, 6 = Saturday)
+    const lastSunday = new Date(lastDayOfMonth);
+    lastSunday.setDate(lastDayOfMonth.getDate() - dayOfWeek); // Subtract days to get the last Sunday
+    return lastSunday.toDateString(); // Return the date as a string
+}
 
+async function displayLastSunday() {
+    // Fetch the last Sunday of the month
+    const lastSundayDate = await getLastSundayOfMonth();
+    const lastSundayElement = document.getElementById("last-sunday");
+    if (lastSundayElement) {
+        lastSundayElement.textContent = `Join us every last Sunday of the month (${lastSundayDate}) after Maghrib prayer for a group Quran recitation.`;
+    }
+}
 
 // Function to display prayer times and Islamic date on the HTML page
 async function displayISNA() {
     try {
+        // Fetch the last Sunday of the month
+        await displayLastSunday();
+
         // Fetch sunrise and sunset times and prayer times
         await displaySunriseSunsetTimes();
         const prayer_temp = await fetchCsvFromGitHub();

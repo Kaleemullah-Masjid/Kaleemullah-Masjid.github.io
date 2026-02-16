@@ -31,7 +31,8 @@
             <p id="Gregorian"></p>
             <p id="Hijri"></p>
             
-            <table class="center"id="Prayer_Times_Table">
+            <!-- Prayer Times Table -->
+            <table class="center" id="Prayer_Times_Table">
                 <thead>
                     <tr>
                         <th style="text-align:center">Prayer</th>
@@ -44,11 +45,6 @@
                         <td style="text-align:center"><b>FAJR</b></td>
                         <td style="text-align:center">06:00 AM</td>
                         <td style="text-align:center" id="FAJR_ISNA"></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:center"><b>SUNRISE</b></td>
-                        <td style="text-align:center" id="sunriseTime"></td>
-                        <td style="text-align:center" id="SUNRISE_ISNA"></td>
                     </tr>
                     <tr>
                         <td style="text-align:center"><b>ZUHR</b></td>
@@ -65,11 +61,24 @@
                         <td style="text-align:center" id="sunsetTime"></td>
                         <td style="text-align:center" id="MAGRHEB_ISNA"></td>
                     </tr>
-
                     <tr>
                         <td style="text-align:center"><b>ISHA</b></td>
                         <td style="text-align:center">07:30 PM</td>
                         <td style="text-align:center" id="ISHA_ISNA"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Sunrise Time Section -->
+            <table class="center" id="Sunrise_Time_Table">
+                <thead>
+                    <tr>
+                        <th style="text-align:center">Sunrise</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center" id="sunriseTime"></td>
                     </tr>
                 </tbody>
             </table>
@@ -88,23 +97,23 @@
             </table>
         </section>
         <section id="events">
-          <h2>📅 Upcoming Events</h2>
-          <ul>
-            <li>
-              <strong>Hadith Discussion:</strong>  
-              Join us every <em>Thursday after Isha prayer</em> for a Hadith discussion.
-            </li>
-            <li>
-              <strong>Quran Surah Recitation:</strong>  
-              Join us every <em>last Sunday of the month after Maghrib prayer</em> for a group Quran recitation.
-            </li>
-          </ul>
+            <h2>📅 Upcoming Events</h2>
+            <ul>
+                <li>
+                    <strong>Hadith Discussion:</strong>  
+                    Join us every <em>Thursday after Isha prayer</em> for a Hadith discussion.
+                </li>
+                <li id="last-sunday">
+                    <!-- The last Sunday date will be dynamically inserted here -->
+                </li>
+            </ul>
         </section>
         
         <section id="contact">
             <h2>Contact Us</h2>
             <p>
-                For inquiries or more information, please feel free to get in touch with us through email. You can reach us at <a href="mailto:EMAIL_ADDRESS">Kaleemiahfoundation@gmail.com</a>. We'll be happy to assist you and address any questions you may have.
+                For inquiries or more information, please feel free to get in touch with us through email. You can reach us at 
+                <a href="mailto:kaleemullahfoundation@gmail.com">kaleemullahfoundation@gmail.com</a>. We'll be happy to assist you and address any questions you may have.
             </p>
         </section>
     </div>
