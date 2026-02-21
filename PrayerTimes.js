@@ -33,6 +33,7 @@ async function formatDate(date, format = 'DD-MM-YYYY') {
     }
 }
 
+// Function to format Islamic date
 async function format_Islamic_Date(date){
     const_islamic_dates = {1: 'Muharram'
         , 2:'Safar'
@@ -130,6 +131,7 @@ async function displaySunriseSunsetTimes() {
     sunsetTimeCell.textContent = sunsetTime;   
 }
 
+// Function to get the last Sunday of the month
 async function getLastSundayOfMonth() {
     const today = new Date();
     const year = today.getFullYear();
@@ -141,6 +143,7 @@ async function getLastSundayOfMonth() {
     return lastSunday.toDateString(); // Return the date as a string
 }
 
+// Function to display the last Sunday of the month on the HTML page
 async function displayLastSunday() {
     // Fetch the last Sunday of the month
     const lastSundayDate = await getLastSundayOfMonth();
